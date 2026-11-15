@@ -403,7 +403,8 @@ export const ModelName = {
   CloudRoleDefinition: 'CloudRoleDefinition',
   CloudRoleAssignment: 'CloudRoleAssignment',
   SecurityFinding: 'SecurityFinding',
-  SecurityFindingEvent: 'SecurityFindingEvent'
+  SecurityFindingEvent: 'SecurityFindingEvent',
+  IamRiskScan: 'IamRiskScan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cloudAccount" | "cloudResource" | "cloudIdentity" | "cloudRoleDefinition" | "cloudRoleAssignment" | "securityFinding" | "securityFindingEvent"
+    modelProps: "cloudAccount" | "cloudResource" | "cloudIdentity" | "cloudRoleDefinition" | "cloudRoleAssignment" | "securityFinding" | "securityFindingEvent" | "iamRiskScan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +942,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IamRiskScan: {
+      payload: Prisma.$IamRiskScanPayload<ExtArgs>
+      fields: Prisma.IamRiskScanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IamRiskScanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IamRiskScanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>
+        }
+        findFirst: {
+          args: Prisma.IamRiskScanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IamRiskScanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>
+        }
+        findMany: {
+          args: Prisma.IamRiskScanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>[]
+        }
+        create: {
+          args: Prisma.IamRiskScanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>
+        }
+        createMany: {
+          args: Prisma.IamRiskScanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IamRiskScanCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>[]
+        }
+        delete: {
+          args: Prisma.IamRiskScanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>
+        }
+        update: {
+          args: Prisma.IamRiskScanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>
+        }
+        deleteMany: {
+          args: Prisma.IamRiskScanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IamRiskScanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IamRiskScanUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>[]
+        }
+        upsert: {
+          args: Prisma.IamRiskScanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRiskScanPayload>
+        }
+        aggregate: {
+          args: Prisma.IamRiskScanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIamRiskScan>
+        }
+        groupBy: {
+          args: Prisma.IamRiskScanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IamRiskScanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IamRiskScanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IamRiskScanCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1099,6 +1174,25 @@ export const SecurityFindingEventScalarFieldEnum = {
 } as const
 
 export type SecurityFindingEventScalarFieldEnum = (typeof SecurityFindingEventScalarFieldEnum)[keyof typeof SecurityFindingEventScalarFieldEnum]
+
+
+export const IamRiskScanScalarFieldEnum = {
+  id: 'id',
+  cloudAccountId: 'cloudAccountId',
+  riskScore: 'riskScore',
+  rawRiskScore: 'rawRiskScore',
+  riskLevel: 'riskLevel',
+  riskExposureCount: 'riskExposureCount',
+  detectedFindingCount: 'detectedFindingCount',
+  severityBreakdown: 'severityBreakdown',
+  severityPoints: 'severityPoints',
+  identitiesScanned: 'identitiesScanned',
+  assignmentsScanned: 'assignmentsScanned',
+  riskScoreWasCapped: 'riskScoreWasCapped',
+  createdAt: 'createdAt'
+} as const
+
+export type IamRiskScanScalarFieldEnum = (typeof IamRiskScanScalarFieldEnum)[keyof typeof IamRiskScanScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1264,6 +1358,14 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
 
 /**
  * Batch Payload for updateMany & deleteMany & createMany
@@ -1423,6 +1525,7 @@ export type GlobalOmitConfig = {
   cloudRoleAssignment?: Prisma.CloudRoleAssignmentOmit
   securityFinding?: Prisma.SecurityFindingOmit
   securityFindingEvent?: Prisma.SecurityFindingEventOmit
+  iamRiskScan?: Prisma.IamRiskScanOmit
 }
 
 /* Types for Logging */

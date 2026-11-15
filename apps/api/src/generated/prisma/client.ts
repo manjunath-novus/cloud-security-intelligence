@@ -76,3 +76,7 @@ export type SecurityFinding = Prisma.SecurityFindingModel
  * 
  */
 export type SecurityFindingEvent = Prisma.SecurityFindingEventModel
+/**
+ * Model IamRiskScan *
+ */
+export type IamRiskScan = Prisma.IamRiskScanModel

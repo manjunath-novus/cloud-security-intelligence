@@ -57,7 +57,8 @@ export const ModelName = {
   CloudRoleDefinition: 'CloudRoleDefinition',
   CloudRoleAssignment: 'CloudRoleAssignment',
   SecurityFinding: 'SecurityFinding',
-  SecurityFindingEvent: 'SecurityFindingEvent'
+  SecurityFindingEvent: 'SecurityFindingEvent',
+  IamRiskScan: 'IamRiskScan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -195,6 +196,25 @@ export const SecurityFindingEventScalarFieldEnum = {
 } as const
 
 export type SecurityFindingEventScalarFieldEnum = (typeof SecurityFindingEventScalarFieldEnum)[keyof typeof SecurityFindingEventScalarFieldEnum]
+
+
+export const IamRiskScanScalarFieldEnum = {
+  id: 'id',
+  cloudAccountId: 'cloudAccountId',
+  riskScore: 'riskScore',
+  rawRiskScore: 'rawRiskScore',
+  riskLevel: 'riskLevel',
+  riskExposureCount: 'riskExposureCount',
+  detectedFindingCount: 'detectedFindingCount',
+  severityBreakdown: 'severityBreakdown',
+  severityPoints: 'severityPoints',
+  identitiesScanned: 'identitiesScanned',
+  assignmentsScanned: 'assignmentsScanned',
+  riskScoreWasCapped: 'riskScoreWasCapped',
+  createdAt: 'createdAt'
+} as const
+
+export type IamRiskScanScalarFieldEnum = (typeof IamRiskScanScalarFieldEnum)[keyof typeof IamRiskScanScalarFieldEnum]
 
 
 export const SortOrder = {

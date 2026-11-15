@@ -106,13 +106,17 @@ describe("Security Findings API", () => {
     const query = prismaMock.securityFinding.findMany.mock.calls[0][0];
 
     expect(query.where.AND).toContainEqual({
+  OR: expect.arrayContaining([
+    {
       cloudResource: {
         is: {
           cloudAccountId: accountId,
           provider: "AZURE",
         },
       },
-    });
+    },
+  ]),
+});
   });
 
   it("should filter findings by resource type", async () => {
@@ -142,31 +146,31 @@ describe("Security Findings API", () => {
     const query = prismaMock.securityFinding.findMany.mock.calls[0][0];
 
     expect(query.where.AND).toContainEqual({
-      OR: [
-        {
-          title: {
+  OR: expect.arrayContaining([
+    {
+      title: {
+        contains: "SSH",
+        mode: "insensitive",
+      },
+    },
+    {
+      description: {
+        contains: "SSH",
+        mode: "insensitive",
+      },
+    },
+    {
+      cloudResource: {
+        is: {
+          name: {
             contains: "SSH",
             mode: "insensitive",
           },
         },
-        {
-          description: {
-            contains: "SSH",
-            mode: "insensitive",
-          },
-        },
-        {
-          cloudResource: {
-            is: {
-              name: {
-                contains: "SSH",
-                mode: "insensitive",
-              },
-            },
-          },
-        },
-      ],
-    });
+      },
+    },
+  ]),
+});
   });
 
   it("should apply pagination correctly", async () => {

@@ -156,6 +156,48 @@ type IamRiskScanResponse = {
     findingsReopened: number;
   };
 };
+type IamRiskHistoryScan = {
+  id: string;
+  cloudAccountId: string;
+  riskScore: number;
+  rawRiskScore: number;
+  riskLevel: "NONE" | "LOW" | "MODERATE" | "HIGH" | "CRITICAL";
+  riskExposureCount: number;
+  detectedFindingCount: number;
+  severityBreakdown: {
+    CRITICAL: number;
+    HIGH: number;
+    MEDIUM: number;
+    LOW: number;
+    INFORMATIONAL: number;
+  };
+  severityPoints: {
+    CRITICAL: number;
+    HIGH: number;
+    MEDIUM: number;
+    LOW: number;
+    INFORMATIONAL: number;
+  };
+  identitiesScanned: number;
+  assignmentsScanned: number;
+  riskScoreWasCapped: boolean;
+  createdAt: string;
+};
+
+type IamRiskHistoryResponse = {
+  account: {
+    id: string;
+    name: string;
+  };
+  total: number;
+  scans: IamRiskHistoryScan[];
+  trend: {
+    direction: "IMPROVING" | "WORSENING" | "STABLE" | "INSUFFICIENT_DATA";
+    scoreChange: number | null;
+    latestScore: number | null;
+    previousScore: number | null;
+  };
+};
 export default function IamPage() {
   const [accounts, setAccounts] = useState<CloudAccount[]>([]);
   const [selectedAccountId, setSelectedAccountId] = useState("");
@@ -175,6 +217,12 @@ export default function IamPage() {
   useState<IamRiskScanResponse["scan"] | null>(null);
   const [riskScanLoading, setRiskScanLoading] = useState(false);
 const [riskScanError, setRiskScanError] = useState("");
+const [riskHistory, setRiskHistory] =
+  useState<IamRiskHistoryResponse | null>(null);
+
+const [riskHistoryLoading, setRiskHistoryLoading] = useState(false);
+
+const [riskHistoryError, setRiskHistoryError] = useState("");
 
 async function runIamRiskScan() {
   if (!selectedAccountId || riskScanLoading) return;
@@ -189,12 +237,35 @@ async function runIamRiskScan() {
     );
 
     setRiskScan(response.scan);
+    await loadIamRiskHistory(selectedAccountId);
   } catch (error) {
     setRiskScanError(
       error instanceof Error ? error.message : "IAM risk scan failed."
     );
   } finally {
     setRiskScanLoading(false);
+  }
+}
+async function loadIamRiskHistory(accountId: string) {
+  if (!accountId) return;
+
+  setRiskHistoryLoading(true);
+  setRiskHistoryError("");
+
+  try {
+    const response = await apiRequest<IamRiskHistoryResponse>(
+      `/iam/history/${accountId}`
+    );
+
+    setRiskHistory(response);
+  } catch (error) {
+    setRiskHistoryError(
+      error instanceof Error
+        ? error.message
+        : "Unable to load IAM risk history."
+    );
+  } finally {
+    setRiskHistoryLoading(false);
   }
 }
 
@@ -226,12 +297,17 @@ async function runIamRiskScan() {
     void loadAccounts();
   }, []);
     useEffect(() => {
-        if (!selectedAccountId) {
-        setIdentities([]);
-        setRoles([]);
-        setAssignments([]);
-       return;
-    }
+  if (!selectedAccountId) {
+    setIdentities([]);
+    setRoles([]);
+    setAssignments([]);
+    setPermissionAnalysis(null);
+    setRiskHistory(null);
+    setRiskHistoryError("");
+    return;
+  }
+
+  void loadIamRiskHistory(selectedAccountId);
 
   async function loadIamData() {
     setIamLoading(true);
@@ -610,6 +686,189 @@ const roleIntelligence = roles.map((role) => {
     </p>
   </div>
 )}
+{/* IAM Risk Trend & Scan History */}
+<section className="space-y-4">
+  <div>
+    <h3 className="text-lg font-semibold">
+      IAM Risk Trend & Scan History
+    </h3>
+    <p className="mt-1 text-sm text-muted-foreground">
+      Track historical risk scores and compare security posture across scans.
+    </p>
+  </div>
+
+  {riskHistoryError && (
+    <div
+      role="alert"
+      className="rounded-xl border border-danger/30 bg-danger/10 p-4 text-sm text-danger"
+    >
+      {riskHistoryError}
+    </div>
+  )}
+
+  {riskHistoryLoading ? (
+    <div className="rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+      <RefreshCw size={18} className="mx-auto mb-3 animate-spin" />
+      Loading risk history...
+    </div>
+  ) : riskHistory ? (
+    <>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-border bg-card p-5">
+          <p className="text-sm text-muted-foreground">Latest risk score</p>
+          <p className="mt-3 text-3xl font-bold tabular-nums">
+            {riskHistory.trend.latestScore ?? "—"}
+            <span className="text-base font-normal text-muted-foreground">
+              /100
+            </span>
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Most recent completed scan
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-5">
+          <p className="text-sm text-muted-foreground">Previous risk score</p>
+          <p className="mt-3 text-3xl font-bold tabular-nums">
+            {riskHistory.trend.previousScore ?? "—"}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Previous completed scan
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-5">
+          <p className="text-sm text-muted-foreground">Score change</p>
+          <p className="mt-3 text-3xl font-bold tabular-nums">
+            {riskHistory.trend.scoreChange === null
+              ? "—"
+              : `${riskHistory.trend.scoreChange > 0 ? "+" : ""}${riskHistory.trend.scoreChange}`}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Latest minus previous score
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-border bg-card p-5">
+          <p className="text-sm text-muted-foreground">Trend direction</p>
+          <p
+            className={`mt-3 text-xl font-semibold ${
+              riskHistory.trend.direction === "IMPROVING"
+                ? "text-emerald-400"
+                : riskHistory.trend.direction === "WORSENING"
+                  ? "text-red-400"
+                  : riskHistory.trend.direction === "STABLE"
+                    ? "text-amber-400"
+                    : "text-muted-foreground"
+            }`}
+          >
+            {riskHistory.trend.direction.replaceAll("_", " ")}
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Based on the two latest scans
+          </p>
+        </div>
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-5">
+          <div>
+            <h4 className="font-semibold">Historical scans</h4>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {riskHistory.total} recorded scans · Showing latest 20
+            </p>
+          </div>
+          <span className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+            {riskHistory.account.name}
+          </span>
+        </div>
+
+        {riskHistory.scans.length === 0 ? (
+          <p className="p-8 text-center text-sm text-muted-foreground">
+            No historical scans found. Run an IAM risk scan to create the first snapshot.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[750px] text-left text-sm">
+              <thead className="border-b border-border bg-muted/40 text-xs text-muted-foreground">
+                <tr>
+                  <th className="px-5 py-3 font-medium">Scan date</th>
+                  <th className="px-5 py-3 font-medium">Risk score</th>
+                  <th className="px-5 py-3 font-medium">Risk level</th>
+                  <th className="px-5 py-3 font-medium">Exposures</th>
+                  <th className="px-5 py-3 font-medium">Findings</th>
+                  <th className="px-5 py-3 font-medium">Severity</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {riskHistory.scans.map((scan, index) => (
+                  <tr key={scan.id} className="hover:bg-muted/30">
+                    <td className="px-5 py-4">
+                      <p className="font-medium">
+                        {new Date(scan.createdAt).toLocaleDateString()}
+                      </p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {new Date(scan.createdAt).toLocaleTimeString()}
+                      </p>
+                      {index === 0 && (
+                        <span className="mt-2 inline-block rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                          Latest
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-5 py-4 font-semibold tabular-nums">
+                      {scan.riskScore}/100
+                      <p className="mt-1 text-xs font-normal text-muted-foreground">
+                        Raw: {scan.rawRiskScore}
+                      </p>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span className="rounded-md bg-muted px-2 py-1 text-xs">
+                        {scan.riskLevel}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4 tabular-nums">
+                      {scan.riskExposureCount}
+                    </td>
+                    <td className="px-5 py-4 tabular-nums">
+                      {scan.detectedFindingCount}
+                    </td>
+                    <td className="px-5 py-4">
+                      <div className="flex flex-wrap gap-1">
+                        <span className="rounded bg-red-500/10 px-2 py-1 text-xs text-red-400">
+                          C: {scan.severityBreakdown.CRITICAL}
+                        </span>
+                        <span className="rounded bg-orange-500/10 px-2 py-1 text-xs text-orange-400">
+                          H: {scan.severityBreakdown.HIGH}
+                        </span>
+                        <span className="rounded bg-amber-500/10 px-2 py-1 text-xs text-amber-400">
+                          M: {scan.severityBreakdown.MEDIUM}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </>
+  ) : (
+    <div className="rounded-xl border border-border bg-card p-8 text-center">
+      <Shield size={24} className="mx-auto text-muted-foreground" />
+      <p className="mt-3 text-sm font-medium">Risk history unavailable</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Select an active cloud account to view its historical scans.
+      </p>
+    </div>
+  )}
+
+  <p className="text-xs text-muted-foreground">
+    Trend compares the two latest capped risk scores. A stable score does not
+    necessarily mean the account is secure.
+  </p>
+</section>
 
         <section className="space-y-4">
   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

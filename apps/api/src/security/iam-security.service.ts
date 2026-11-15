@@ -1,4 +1,3 @@
-
 import { Prisma } from "../generated/prisma/client.js";
 import { prisma } from "../db.js";
 import { calculateIamRiskScore } from "./iam-risk-scoring.js";
@@ -10,6 +9,8 @@ import {
 
 type IamScanResult = {
   accountId: string;
+  scanId: string;
+  scannedAt: Date;
   accountName: string;
   identitiesScanned: number;
   assignmentsScanned: number;
@@ -244,7 +245,25 @@ export async function scanCloudAccountIam(
 
   const riskSummary = calculateIamRiskScore(riskFindings);
 
-  return {
+  const riskScan = await prisma.iamRiskScan.create({
+  data: {
+    cloudAccountId: account.id,
+    riskScore: riskSummary.score,
+    rawRiskScore: riskSummary.rawScore,
+    riskLevel: riskSummary.level,
+    riskExposureCount: riskSummary.findingCount,
+    detectedFindingCount: detectionsByIdentityAndRule.size,
+    severityBreakdown: riskSummary.severityBreakdown,
+    severityPoints: riskSummary.severityPoints,
+    identitiesScanned: account.identities.length,
+    assignmentsScanned,
+    riskScoreWasCapped: riskSummary.wasCapped,
+  },
+});
+
+return {
+    scanId: riskScan.id,
+    scannedAt: riskScan.createdAt,
     accountId: account.id,
     accountName: account.name,
     riskScore: riskSummary.score,

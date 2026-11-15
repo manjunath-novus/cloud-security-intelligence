@@ -5,6 +5,7 @@ import { prisma } from "../db.js";
 import { discoverCloudIam } from "../discovery/iam-discovery.service.js";
 import { scanCloudAccountIam } from "../security/iam-security.service.js";
 import { getPermissionIntelligence } from "../security/permission-intelligence.service.js";
+import { calculateIamRiskTrend } from "../security/iam-risk-history.js";
 
 const router = Router();
 
@@ -12,6 +13,65 @@ const accountIdSchema = z.string().uuid();
 
 const accountQuerySchema = z.object({
   cloudAccountId: accountIdSchema
+});
+// GET /api/iam/history/:cloudAccountId
+router.get("/history/:cloudAccountId", async (req, res) => {
+  const validation = accountIdSchema.safeParse(
+    req.params.cloudAccountId
+  );
+
+  if (!validation.success) {
+    return res.status(400).json({
+      error: "Invalid cloud account ID."
+    });
+  }
+
+  try {
+    const cloudAccountId = validation.data;
+
+    const account = await prisma.cloudAccount.findUnique({
+      where: { id: cloudAccountId },
+      select: {
+        id: true,
+        name: true
+      }
+    });
+
+    if (!account) {
+      return res.status(404).json({
+        error: "Cloud account not found."
+      });
+    }
+
+    const scans = await prisma.iamRiskScan.findMany({
+      where: { cloudAccountId },
+      orderBy: { createdAt: "desc" },
+      take: 20
+    });
+
+    const latest = scans[0];
+    const previous = scans[1];
+    const scoreChange =
+      latest && previous ? latest.riskScore - previous.riskScore : null;
+
+    const trend = calculateIamRiskTrend(
+      latest?.riskScore ?? null,
+      previous?.riskScore ?? null,
+    );
+
+    return res.status(200).json({
+      account,
+      total: scans.length,
+      scans,
+      trend,
+    });
+  } catch (error) {
+    console.error("Failed to retrieve IAM scan history:", error);
+
+    return res.status(500).json({
+      error: "Unable to retrieve IAM scan history."
+    });
+  }
 });
 
 // POST /api/iam/discover/:cloudAccountId

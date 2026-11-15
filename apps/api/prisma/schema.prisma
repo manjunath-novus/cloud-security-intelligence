@@ -46,6 +46,7 @@ model CloudAccount {
   identities      CloudIdentity[]
   roleDefinitions CloudRoleDefinition[]
   roleAssignments CloudRoleAssignment[]
+  iamRiskScans    IamRiskScan[]
 
   resources CloudResource[]
 
@@ -198,4 +199,29 @@ model SecurityFindingEvent {
   @@index([findingId, createdAt])
   @@index([eventType])
   @@index([actorId])
+}
+model IamRiskScan {
+  id                  String   @id @default(uuid())
+  cloudAccountId      String
+
+  riskScore           Int
+  rawRiskScore        Int
+  riskLevel           String
+
+  riskExposureCount   Int
+  detectedFindingCount Int
+
+  severityBreakdown   Json
+  severityPoints      Json
+
+  identitiesScanned   Int
+  assignmentsScanned  Int
+
+  riskScoreWasCapped  Boolean  @default(false)
+
+  createdAt           DateTime @default(now())
+
+  cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+
+  @@index([cloudAccountId, createdAt])
 }
