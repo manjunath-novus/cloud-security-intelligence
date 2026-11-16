@@ -154,6 +154,23 @@ type IamRiskScanResponse = {
     findingsCreated: number;
     findingsUpdated: number;
     findingsReopened: number;
+    recommendations: {
+  ruleId: string;
+  identityId: string;
+  title: string;
+  explanation: string;
+  recommendedActions: string[];
+  expectedImpact: string;
+  priority: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  executionMode: "MANUAL";
+}[];
+    findings: {
+      ruleId: string;
+      evidence: {
+        identityId?: string;
+        identityName?: string;
+      };
+    }[];
   };
 };
 type IamRiskHistoryScan = {
@@ -686,6 +703,90 @@ const roleIntelligence = roles.map((role) => {
     </p>
   </div>
 )}
+
+{/* IAM Remediation Recommendations */}
+<section className="rounded-xl border border-border bg-card p-5">
+  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <h3 className="text-lg font-semibold">
+        Remediation Recommendations
+      </h3>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Suggested actions to reduce detected IAM security risks.
+      </p>
+    </div>
+
+    <span className="w-fit rounded-full border border-warning/30 bg-warning/10 px-3 py-1 text-xs font-medium text-warning">
+      SIMULATED · MANUAL ACTION ONLY
+    </span>
+  </div>
+
+  {!riskScan ? (
+    <p className="mt-5 text-sm text-muted-foreground">
+      Run an IAM risk scan to generate remediation recommendations.
+    </p>
+  ) : riskScan.recommendations.length === 0 ? (
+    <p className="mt-5 rounded-lg bg-muted/40 p-4 text-sm text-muted-foreground">
+      No remediation recommendations were generated for this scan.
+    </p>
+  ) : (
+    <div className="mt-5 space-y-4">
+      {riskScan.recommendations.map((recommendation, index) => (
+        <div
+          key={`${recommendation.ruleId}-${index}`}
+          className="rounded-lg border border-border p-4"
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+  <h4 className="font-semibold">
+    {recommendation.title}
+  </h4>
+  <p className="mt-1 text-xs text-muted-foreground">
+    Affected identity:{" "}
+{riskScan.findings.find(
+  (finding) =>
+    finding.ruleId === recommendation.ruleId &&
+    finding.evidence.identityId === recommendation.identityId
+)?.evidence.identityName ?? recommendation.identityId}
+  </p>
+</div>
+
+            <span className="rounded-md bg-muted px-2 py-1 text-xs font-medium">
+              {recommendation.priority}
+            </span>
+          </div>
+
+          <p className="mt-2 text-sm text-muted-foreground">
+            {recommendation.explanation}
+          </p>
+
+          <p className="mt-3 text-xs font-medium text-muted-foreground">
+            Recommended actions
+          </p>
+
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+            {recommendation.recommendedActions.map((action, actionIndex) => (
+              <li key={actionIndex}>{action}</li>
+            ))}
+          </ul>
+
+          <div className="mt-4 rounded-md bg-muted/40 p-3">
+            <p className="text-xs font-medium">
+              Expected impact
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {recommendation.expectedImpact}
+            </p>
+          </div>
+
+          <p className="mt-3 text-xs text-muted-foreground">
+            Rule: {recommendation.ruleId} · Execution: MANUAL
+          </p>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
 {/* IAM Risk Trend & Scan History */}
 <section className="space-y-4">
   <div>
