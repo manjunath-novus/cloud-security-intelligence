@@ -58,7 +58,8 @@ export const ModelName = {
   CloudRoleAssignment: 'CloudRoleAssignment',
   SecurityFinding: 'SecurityFinding',
   SecurityFindingEvent: 'SecurityFindingEvent',
-  IamRiskScan: 'IamRiskScan'
+  IamRiskScan: 'IamRiskScan',
+  IamRemediationApproval: 'IamRemediationApproval'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -215,6 +216,27 @@ export const IamRiskScanScalarFieldEnum = {
 } as const
 
 export type IamRiskScanScalarFieldEnum = (typeof IamRiskScanScalarFieldEnum)[keyof typeof IamRiskScanScalarFieldEnum]
+
+
+export const IamRemediationApprovalScalarFieldEnum = {
+  id: 'id',
+  cloudAccountId: 'cloudAccountId',
+  cloudIdentityId: 'cloudIdentityId',
+  ruleId: 'ruleId',
+  recommendationTitle: 'recommendationTitle',
+  requestedBy: 'requestedBy',
+  reviewedBy: 'reviewedBy',
+  status: 'status',
+  requestReason: 'requestReason',
+  reviewComment: 'reviewComment',
+  requestedAt: 'requestedAt',
+  reviewedAt: 'reviewedAt',
+  cancelledAt: 'cancelledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IamRemediationApprovalScalarFieldEnum = (typeof IamRemediationApprovalScalarFieldEnum)[keyof typeof IamRemediationApprovalScalarFieldEnum]
 
 
 export const SortOrder = {

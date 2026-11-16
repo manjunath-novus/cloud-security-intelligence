@@ -14,6 +14,21 @@ const accountIdSchema = z.string().uuid();
 const accountQuerySchema = z.object({
   cloudAccountId: accountIdSchema
 });
+
+const createApprovalSchema = z.object({
+  cloudAccountId: accountIdSchema,
+  cloudIdentityId: accountIdSchema,
+  ruleId: z.string().min(1).max(100),
+  recommendationTitle: z.string().min(1).max(200),
+  requestedBy: z.string().min(1).max(100),
+  requestReason: z.string().min(10).max(1000)
+});
+
+const approvalDecisionSchema = z.object({
+  action: z.enum(["APPROVE", "REJECT"]),
+  reviewedBy: z.string().min(1).max(100),
+  reviewComment: z.string().max(1000).optional()
+});
 // GET /api/iam/history/:cloudAccountId
 router.get("/history/:cloudAccountId", async (req, res) => {
   const validation = accountIdSchema.safeParse(
@@ -300,4 +315,301 @@ router.get("/assignments", async (req, res) => {
   }
 });
 
+// POST /api/iam/approvals
+router.post("/approvals", async (req, res) => {
+  const validation = createApprovalSchema.safeParse(req.body);
+
+  if (!validation.success) {
+    return res.status(400).json({
+      error: "Invalid approval request.",
+      details: validation.error.flatten()
+    });
+  }
+
+  try {
+    const {
+      cloudAccountId,
+      cloudIdentityId,
+      ruleId,
+      recommendationTitle,
+      requestedBy,
+      requestReason
+    } = validation.data;
+
+    const [account, identity] = await Promise.all([
+      prisma.cloudAccount.findUnique({
+        where: { id: cloudAccountId },
+        select: { id: true }
+      }),
+      prisma.cloudIdentity.findFirst({
+        where: {
+          id: cloudIdentityId,
+          cloudAccountId
+        },
+        select: { id: true }
+      })
+    ]);
+
+    if (!account) {
+      return res.status(404).json({
+        error: "Cloud account not found."
+      });
+    }
+
+    if (!identity) {
+      return res.status(404).json({
+        error: "Cloud identity not found in this cloud account."
+      });
+    }
+
+    const approval = await prisma.iamRemediationApproval.create({
+      data: {
+        cloudAccountId,
+        cloudIdentityId,
+        ruleId,
+        recommendationTitle,
+        requestedBy,
+        requestReason
+      }
+    });
+
+    return res.status(201).json({
+      message: "Remediation approval request created successfully.",
+      approval
+    });
+  } catch (error) {
+    console.error("Failed to create remediation approval:", error);
+
+    return res.status(500).json({
+      error: "Unable to create remediation approval request."
+    });
+  }
+});
+// GET /api/iam/approvals?cloudAccountId=...
+router.get("/approvals", async (req, res) => {
+  const validation = accountQuerySchema.safeParse(req.query);
+
+  if (!validation.success) {
+    return res.status(400).json({
+      error: "A valid cloudAccountId is required."
+    });
+  }
+
+  try {
+    const approvals = await prisma.iamRemediationApproval.findMany({
+      where: {
+        cloudAccountId: validation.data.cloudAccountId
+      },
+      include: {
+      cloudIdentity: {
+      select: {
+      id: true,
+      displayName: true,
+      identityType: true
+    }
+  }
+},
+      orderBy: {
+        requestedAt: "desc"
+      }
+    });
+
+    return res.status(200).json({
+      approvals,
+      total: approvals.length
+    });
+  } catch (error) {
+    console.error("Failed to retrieve remediation approvals:", error);
+
+    return res.status(500).json({
+      error: "Unable to retrieve remediation approvals."
+    });
+  }
+});
+
+// PATCH /api/iam/approvals/:id/decision
+router.patch("/approvals/:id/decision", async (req, res) => {
+  const idValidation = accountIdSchema.safeParse(req.params.id);
+  const bodyValidation = approvalDecisionSchema.safeParse(req.body);
+
+  if (!idValidation.success || !bodyValidation.success) {
+    return res.status(400).json({
+      error: "Invalid approval decision request."
+    });
+  }
+
+  try {
+    const { action, reviewedBy, reviewComment } = bodyValidation.data;
+
+    const result = await prisma.$transaction(async (tx) => {
+      const approval = await tx.iamRemediationApproval.findUnique({
+        where: { id: idValidation.data }
+      });
+
+      if (!approval) {
+        return { type: "NOT_FOUND" as const };
+      }
+
+      if (approval.status !== "PENDING") {
+        return { type: "CONFLICT" as const };
+      }
+
+      if (approval.requestedBy === reviewedBy) {
+        return { type: "SELF_REVIEW" as const };
+      }
+
+      const updated = await tx.iamRemediationApproval.updateMany({
+        where: {
+          id: idValidation.data,
+          status: "PENDING"
+        },
+        data: {
+          status: action === "APPROVE" ? "APPROVED" : "REJECTED",
+          reviewedBy,
+          reviewComment: reviewComment ?? null,
+          reviewedAt: new Date()
+        }
+      });
+
+      if (updated.count !== 1) {
+        return { type: "CONFLICT" as const };
+      }
+
+      const updatedApproval =
+        await tx.iamRemediationApproval.findUnique({
+          where: { id: idValidation.data },
+          include: {
+            cloudIdentity: {
+              select: {
+                id: true,
+                displayName: true,
+                identityType: true
+              }
+            }
+          }
+        });
+
+      return {
+        type: "SUCCESS" as const,
+        approval: updatedApproval
+      };
+    });
+
+    if (result.type === "NOT_FOUND") {
+      return res.status(404).json({
+        error: "Approval request not found."
+      });
+    }
+
+    if (result.type === "CONFLICT") {
+      return res.status(409).json({
+        error: "This approval request has already been decided or cancelled."
+      });
+    }
+
+    if (result.type === "SELF_REVIEW") {
+      return res.status(403).json({
+        error: "Requesters cannot review their own approval requests."
+      });
+    }
+
+    return res.status(200).json({
+      message: `Approval request ${action === "APPROVE" ? "approved" : "rejected"} successfully.`,
+      approval: result.approval
+    });
+  } catch (error) {
+    console.error("Failed to process approval decision:", error);
+
+    return res.status(500).json({
+      error: "Unable to process approval decision."
+    });
+  }
+});
+
+// PATCH /api/iam/approvals/:id/cancel
+router.patch("/approvals/:id/cancel", async (req, res) => {
+  const idValidation = accountIdSchema.safeParse(req.params.id);
+
+  const requesterValidation = z.object({
+    requestedBy: z.string().min(1).max(100)
+  }).safeParse(req.body);
+
+  if (!idValidation.success || !requesterValidation.success) {
+    return res.status(400).json({
+      error: "Invalid approval cancellation request."
+    });
+  }
+
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      const approval = await tx.iamRemediationApproval.findUnique({
+        where: { id: idValidation.data }
+      });
+
+      if (!approval) {
+        return { type: "NOT_FOUND" as const };
+      }
+
+      if (approval.requestedBy !== requesterValidation.data.requestedBy) {
+        return { type: "FORBIDDEN" as const };
+      }
+
+      if (approval.status !== "PENDING") {
+        return { type: "CONFLICT" as const };
+      }
+
+      const updated = await tx.iamRemediationApproval.updateMany({
+        where: {
+          id: idValidation.data,
+          status: "PENDING",
+          requestedBy: requesterValidation.data.requestedBy
+        },
+        data: {
+          status: "CANCELLED",
+          cancelledAt: new Date()
+        }
+      });
+
+      if (updated.count !== 1) {
+        return { type: "CONFLICT" as const };
+      }
+
+      return {
+        type: "SUCCESS" as const,
+        approval: await tx.iamRemediationApproval.findUnique({
+          where: { id: idValidation.data }
+        })
+      };
+    });
+
+    if (result.type === "NOT_FOUND") {
+      return res.status(404).json({
+        error: "Approval request not found."
+      });
+    }
+
+    if (result.type === "FORBIDDEN") {
+      return res.status(403).json({
+        error: "Only the original requester can cancel this request."
+      });
+    }
+
+    if (result.type === "CONFLICT") {
+      return res.status(409).json({
+        error: "Only pending approval requests can be cancelled."
+      });
+    }
+
+    return res.status(200).json({
+      message: "Approval request cancelled successfully.",
+      approval: result.approval
+    });
+  } catch (error) {
+    console.error("Failed to cancel approval request:", error);
+
+    return res.status(500).json({
+      error: "Unable to cancel approval request."
+    });
+  }
+});
 export default router;

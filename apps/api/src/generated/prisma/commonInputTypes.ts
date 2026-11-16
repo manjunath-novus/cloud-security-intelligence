@@ -311,6 +311,23 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
+export type EnumIamRemediationApprovalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationApprovalStatus | Prisma.EnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel> | $Enums.IamRemediationApprovalStatus
+}
+
+export type EnumIamRemediationApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationApprovalStatus | Prisma.EnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.IamRemediationApprovalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -592,6 +609,23 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
+}
+
+export type NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationApprovalStatus | Prisma.EnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel> | $Enums.IamRemediationApprovalStatus
+}
+
+export type NestedEnumIamRemediationApprovalStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationApprovalStatus | Prisma.EnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationApprovalStatus[] | Prisma.ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationApprovalStatusWithAggregatesFilter<$PrismaModel> | $Enums.IamRemediationApprovalStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
 }
 
 
