@@ -2,6 +2,10 @@ import { Prisma } from "../generated/prisma/client.js";
 import { prisma } from "../db.js";
 import { calculateIamRiskScore } from "./iam-risk-scoring.js";
 import {
+  generateIamRemediationRecommendations,
+  type IamRemediationRecommendation,
+} from "./iam-remediation.service.js";
+import {
   evaluateIamSecurity,
   type IamEvaluationInput,
   type IamSecurityDetection,
@@ -25,6 +29,7 @@ type IamScanResult = {
   severityBreakdown: Record<string, number>;
   severityPoints: Record<string, number>;
   riskScoreWasCapped: boolean;
+  recommendations: IamRemediationRecommendation[];
   findings: IamSecurityDetection[];
 };
 
@@ -242,6 +247,8 @@ export async function scanCloudAccountIam(
     (assignment) => assignment.assignmentId
   ),
 }));
+const recommendations =
+  generateIamRemediationRecommendations(riskFindings);
 
   const riskSummary = calculateIamRiskScore(riskFindings);
 
@@ -279,6 +286,7 @@ return {
     findingsCreated,
     findingsUpdated,
     findingsReopened,
+    recommendations,
     findings: Array.from(
       detectionsByIdentityAndRule.values()
     ).map((item) => ({
