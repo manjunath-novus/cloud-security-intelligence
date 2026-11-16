@@ -404,7 +404,8 @@ export const ModelName = {
   CloudRoleAssignment: 'CloudRoleAssignment',
   SecurityFinding: 'SecurityFinding',
   SecurityFindingEvent: 'SecurityFindingEvent',
-  IamRiskScan: 'IamRiskScan'
+  IamRiskScan: 'IamRiskScan',
+  IamRemediationApproval: 'IamRemediationApproval'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "cloudAccount" | "cloudResource" | "cloudIdentity" | "cloudRoleDefinition" | "cloudRoleAssignment" | "securityFinding" | "securityFindingEvent" | "iamRiskScan"
+    modelProps: "cloudAccount" | "cloudResource" | "cloudIdentity" | "cloudRoleDefinition" | "cloudRoleAssignment" | "securityFinding" | "securityFindingEvent" | "iamRiskScan" | "iamRemediationApproval"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1016,6 +1017,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IamRemediationApproval: {
+      payload: Prisma.$IamRemediationApprovalPayload<ExtArgs>
+      fields: Prisma.IamRemediationApprovalFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IamRemediationApprovalFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IamRemediationApprovalFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>
+        }
+        findFirst: {
+          args: Prisma.IamRemediationApprovalFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IamRemediationApprovalFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>
+        }
+        findMany: {
+          args: Prisma.IamRemediationApprovalFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>[]
+        }
+        create: {
+          args: Prisma.IamRemediationApprovalCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>
+        }
+        createMany: {
+          args: Prisma.IamRemediationApprovalCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IamRemediationApprovalCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>[]
+        }
+        delete: {
+          args: Prisma.IamRemediationApprovalDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>
+        }
+        update: {
+          args: Prisma.IamRemediationApprovalUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>
+        }
+        deleteMany: {
+          args: Prisma.IamRemediationApprovalDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IamRemediationApprovalUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IamRemediationApprovalUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>[]
+        }
+        upsert: {
+          args: Prisma.IamRemediationApprovalUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IamRemediationApprovalPayload>
+        }
+        aggregate: {
+          args: Prisma.IamRemediationApprovalAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIamRemediationApproval>
+        }
+        groupBy: {
+          args: Prisma.IamRemediationApprovalGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IamRemediationApprovalGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IamRemediationApprovalCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IamRemediationApprovalCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1195,6 +1270,27 @@ export const IamRiskScanScalarFieldEnum = {
 export type IamRiskScanScalarFieldEnum = (typeof IamRiskScanScalarFieldEnum)[keyof typeof IamRiskScanScalarFieldEnum]
 
 
+export const IamRemediationApprovalScalarFieldEnum = {
+  id: 'id',
+  cloudAccountId: 'cloudAccountId',
+  cloudIdentityId: 'cloudIdentityId',
+  ruleId: 'ruleId',
+  recommendationTitle: 'recommendationTitle',
+  requestedBy: 'requestedBy',
+  reviewedBy: 'reviewedBy',
+  status: 'status',
+  requestReason: 'requestReason',
+  reviewComment: 'reviewComment',
+  requestedAt: 'requestedAt',
+  reviewedAt: 'reviewedAt',
+  cancelledAt: 'cancelledAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IamRemediationApprovalScalarFieldEnum = (typeof IamRemediationApprovalScalarFieldEnum)[keyof typeof IamRemediationApprovalScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1358,14 +1454,34 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
+
+
+/**
+ * Reference to a field of type 'IamRemediationApprovalStatus'
+ */
+export type EnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IamRemediationApprovalStatus'>
+
+
+
+/**
+ * Reference to a field of type 'IamRemediationApprovalStatus[]'
+ */
+export type ListEnumIamRemediationApprovalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'IamRemediationApprovalStatus[]'>
+
+
+
 /**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+
+
+
 /**
  * Reference to a field of type 'Float[]'
  */
 export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+
 
 /**
  * Batch Payload for updateMany & deleteMany & createMany
@@ -1526,6 +1642,7 @@ export type GlobalOmitConfig = {
   securityFinding?: Prisma.SecurityFindingOmit
   securityFindingEvent?: Prisma.SecurityFindingEventOmit
   iamRiskScan?: Prisma.IamRiskScanOmit
+  iamRemediationApproval?: Prisma.IamRemediationApprovalOmit
 }
 
 /* Types for Logging */

@@ -229,6 +229,7 @@ export type CloudIdentityWhereInput = {
   cloudAccount?: Prisma.XOR<Prisma.CloudAccountScalarRelationFilter, Prisma.CloudAccountWhereInput>
   roleAssignments?: Prisma.CloudRoleAssignmentListRelationFilter
   findings?: Prisma.SecurityFindingListRelationFilter
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalListRelationFilter
 }
 
 export type CloudIdentityOrderByWithRelationInput = {
@@ -246,6 +247,7 @@ export type CloudIdentityOrderByWithRelationInput = {
   cloudAccount?: Prisma.CloudAccountOrderByWithRelationInput
   roleAssignments?: Prisma.CloudRoleAssignmentOrderByRelationAggregateInput
   findings?: Prisma.SecurityFindingOrderByRelationAggregateInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalOrderByRelationAggregateInput
 }
 
 export type CloudIdentityWhereUniqueInput = Prisma.AtLeast<{
@@ -267,6 +269,7 @@ export type CloudIdentityWhereUniqueInput = Prisma.AtLeast<{
   cloudAccount?: Prisma.XOR<Prisma.CloudAccountScalarRelationFilter, Prisma.CloudAccountWhereInput>
   roleAssignments?: Prisma.CloudRoleAssignmentListRelationFilter
   findings?: Prisma.SecurityFindingListRelationFilter
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalListRelationFilter
 }, "id" | "cloudAccountId_providerIdentityId">
 
 export type CloudIdentityOrderByWithAggregationInput = {
@@ -317,6 +320,7 @@ export type CloudIdentityCreateInput = {
   cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIdentitiesInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudIdentityInput
   findings?: Prisma.SecurityFindingCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityUncheckedCreateInput = {
@@ -333,6 +337,7 @@ export type CloudIdentityUncheckedCreateInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedCreateNestedManyWithoutCloudIdentityInput
   findings?: Prisma.SecurityFindingUncheckedCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityUpdateInput = {
@@ -349,6 +354,7 @@ export type CloudIdentityUpdateInput = {
   cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIdentitiesNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudIdentityNestedInput
   findings?: Prisma.SecurityFindingUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityUncheckedUpdateInput = {
@@ -365,6 +371,7 @@ export type CloudIdentityUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedUpdateManyWithoutCloudIdentityNestedInput
   findings?: Prisma.SecurityFindingUncheckedUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityCreateManyInput = {
@@ -549,6 +556,20 @@ export type CloudIdentityUpdateOneWithoutFindingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CloudIdentityUpdateToOneWithWhereWithoutFindingsInput, Prisma.CloudIdentityUpdateWithoutFindingsInput>, Prisma.CloudIdentityUncheckedUpdateWithoutFindingsInput>
 }
 
+export type CloudIdentityCreateNestedOneWithoutIamRemediationApprovalsInput = {
+  create?: Prisma.XOR<Prisma.CloudIdentityCreateWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUncheckedCreateWithoutIamRemediationApprovalsInput>
+  connectOrCreate?: Prisma.CloudIdentityCreateOrConnectWithoutIamRemediationApprovalsInput
+  connect?: Prisma.CloudIdentityWhereUniqueInput
+}
+
+export type CloudIdentityUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput = {
+  create?: Prisma.XOR<Prisma.CloudIdentityCreateWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUncheckedCreateWithoutIamRemediationApprovalsInput>
+  connectOrCreate?: Prisma.CloudIdentityCreateOrConnectWithoutIamRemediationApprovalsInput
+  upsert?: Prisma.CloudIdentityUpsertWithoutIamRemediationApprovalsInput
+  connect?: Prisma.CloudIdentityWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CloudIdentityUpdateToOneWithWhereWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUpdateWithoutIamRemediationApprovalsInput>, Prisma.CloudIdentityUncheckedUpdateWithoutIamRemediationApprovalsInput>
+}
+
 export type CloudIdentityCreateWithoutCloudAccountInput = {
   id?: string
   providerIdentityId: string
@@ -562,6 +583,7 @@ export type CloudIdentityCreateWithoutCloudAccountInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudIdentityInput
   findings?: Prisma.SecurityFindingCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityUncheckedCreateWithoutCloudAccountInput = {
@@ -577,6 +599,7 @@ export type CloudIdentityUncheckedCreateWithoutCloudAccountInput = {
   updatedAt?: Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedCreateNestedManyWithoutCloudIdentityInput
   findings?: Prisma.SecurityFindingUncheckedCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityCreateOrConnectWithoutCloudAccountInput = {
@@ -635,6 +658,7 @@ export type CloudIdentityCreateWithoutRoleAssignmentsInput = {
   updatedAt?: Date | string
   cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIdentitiesInput
   findings?: Prisma.SecurityFindingCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityUncheckedCreateWithoutRoleAssignmentsInput = {
@@ -650,6 +674,7 @@ export type CloudIdentityUncheckedCreateWithoutRoleAssignmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   findings?: Prisma.SecurityFindingUncheckedCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityCreateOrConnectWithoutRoleAssignmentsInput = {
@@ -681,6 +706,7 @@ export type CloudIdentityUpdateWithoutRoleAssignmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIdentitiesNestedInput
   findings?: Prisma.SecurityFindingUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityUncheckedUpdateWithoutRoleAssignmentsInput = {
@@ -696,6 +722,7 @@ export type CloudIdentityUncheckedUpdateWithoutRoleAssignmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   findings?: Prisma.SecurityFindingUncheckedUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityCreateWithoutFindingsInput = {
@@ -711,6 +738,7 @@ export type CloudIdentityCreateWithoutFindingsInput = {
   updatedAt?: Date | string
   cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIdentitiesInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityUncheckedCreateWithoutFindingsInput = {
@@ -726,6 +754,7 @@ export type CloudIdentityUncheckedCreateWithoutFindingsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedCreateNestedManyWithoutCloudIdentityInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedCreateNestedManyWithoutCloudIdentityInput
 }
 
 export type CloudIdentityCreateOrConnectWithoutFindingsInput = {
@@ -757,6 +786,7 @@ export type CloudIdentityUpdateWithoutFindingsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIdentitiesNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityUncheckedUpdateWithoutFindingsInput = {
@@ -772,6 +802,87 @@ export type CloudIdentityUncheckedUpdateWithoutFindingsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityNestedInput
+}
+
+export type CloudIdentityCreateWithoutIamRemediationApprovalsInput = {
+  id?: string
+  providerIdentityId: string
+  displayName: string
+  identityType: $Enums.CloudIdentityType
+  userPrincipalName?: string | null
+  isEnabled?: boolean
+  metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  discoverySource?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIdentitiesInput
+  roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudIdentityInput
+  findings?: Prisma.SecurityFindingCreateNestedManyWithoutCloudIdentityInput
+}
+
+export type CloudIdentityUncheckedCreateWithoutIamRemediationApprovalsInput = {
+  id?: string
+  cloudAccountId: string
+  providerIdentityId: string
+  displayName: string
+  identityType: $Enums.CloudIdentityType
+  userPrincipalName?: string | null
+  isEnabled?: boolean
+  metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  discoverySource?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roleAssignments?: Prisma.CloudRoleAssignmentUncheckedCreateNestedManyWithoutCloudIdentityInput
+  findings?: Prisma.SecurityFindingUncheckedCreateNestedManyWithoutCloudIdentityInput
+}
+
+export type CloudIdentityCreateOrConnectWithoutIamRemediationApprovalsInput = {
+  where: Prisma.CloudIdentityWhereUniqueInput
+  create: Prisma.XOR<Prisma.CloudIdentityCreateWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUncheckedCreateWithoutIamRemediationApprovalsInput>
+}
+
+export type CloudIdentityUpsertWithoutIamRemediationApprovalsInput = {
+  update: Prisma.XOR<Prisma.CloudIdentityUpdateWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUncheckedUpdateWithoutIamRemediationApprovalsInput>
+  create: Prisma.XOR<Prisma.CloudIdentityCreateWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUncheckedCreateWithoutIamRemediationApprovalsInput>
+  where?: Prisma.CloudIdentityWhereInput
+}
+
+export type CloudIdentityUpdateToOneWithWhereWithoutIamRemediationApprovalsInput = {
+  where?: Prisma.CloudIdentityWhereInput
+  data: Prisma.XOR<Prisma.CloudIdentityUpdateWithoutIamRemediationApprovalsInput, Prisma.CloudIdentityUncheckedUpdateWithoutIamRemediationApprovalsInput>
+}
+
+export type CloudIdentityUpdateWithoutIamRemediationApprovalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  providerIdentityId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  identityType?: Prisma.EnumCloudIdentityTypeFieldUpdateOperationsInput | $Enums.CloudIdentityType
+  userPrincipalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  discoverySource?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIdentitiesNestedInput
+  roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudIdentityNestedInput
+  findings?: Prisma.SecurityFindingUpdateManyWithoutCloudIdentityNestedInput
+}
+
+export type CloudIdentityUncheckedUpdateWithoutIamRemediationApprovalsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  providerIdentityId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  identityType?: Prisma.EnumCloudIdentityTypeFieldUpdateOperationsInput | $Enums.CloudIdentityType
+  userPrincipalName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  metadata?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  discoverySource?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roleAssignments?: Prisma.CloudRoleAssignmentUncheckedUpdateManyWithoutCloudIdentityNestedInput
+  findings?: Prisma.SecurityFindingUncheckedUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityCreateManyCloudAccountInput = {
@@ -800,6 +911,7 @@ export type CloudIdentityUpdateWithoutCloudAccountInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudIdentityNestedInput
   findings?: Prisma.SecurityFindingUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityUncheckedUpdateWithoutCloudAccountInput = {
@@ -815,6 +927,7 @@ export type CloudIdentityUncheckedUpdateWithoutCloudAccountInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedUpdateManyWithoutCloudIdentityNestedInput
   findings?: Prisma.SecurityFindingUncheckedUpdateManyWithoutCloudIdentityNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityNestedInput
 }
 
 export type CloudIdentityUncheckedUpdateManyWithoutCloudAccountInput = {
@@ -838,11 +951,13 @@ export type CloudIdentityUncheckedUpdateManyWithoutCloudAccountInput = {
 export type CloudIdentityCountOutputType = {
   roleAssignments: number
   findings: number
+  iamRemediationApprovals: number
 }
 
 export type CloudIdentityCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   roleAssignments?: boolean | CloudIdentityCountOutputTypeCountRoleAssignmentsArgs
   findings?: boolean | CloudIdentityCountOutputTypeCountFindingsArgs
+  iamRemediationApprovals?: boolean | CloudIdentityCountOutputTypeCountIamRemediationApprovalsArgs
 }
 
 /**
@@ -869,6 +984,13 @@ export type CloudIdentityCountOutputTypeCountFindingsArgs<ExtArgs extends runtim
   where?: Prisma.SecurityFindingWhereInput
 }
 
+/**
+ * CloudIdentityCountOutputType without action
+ */
+export type CloudIdentityCountOutputTypeCountIamRemediationApprovalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IamRemediationApprovalWhereInput
+}
+
 
 export type CloudIdentitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -885,6 +1007,7 @@ export type CloudIdentitySelect<ExtArgs extends runtime.Types.Extensions.Interna
   cloudAccount?: boolean | Prisma.CloudAccountDefaultArgs<ExtArgs>
   roleAssignments?: boolean | Prisma.CloudIdentity$roleAssignmentsArgs<ExtArgs>
   findings?: boolean | Prisma.CloudIdentity$findingsArgs<ExtArgs>
+  iamRemediationApprovals?: boolean | Prisma.CloudIdentity$iamRemediationApprovalsArgs<ExtArgs>
   _count?: boolean | Prisma.CloudIdentityCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cloudIdentity"]>
 
@@ -937,6 +1060,7 @@ export type CloudIdentityInclude<ExtArgs extends runtime.Types.Extensions.Intern
   cloudAccount?: boolean | Prisma.CloudAccountDefaultArgs<ExtArgs>
   roleAssignments?: boolean | Prisma.CloudIdentity$roleAssignmentsArgs<ExtArgs>
   findings?: boolean | Prisma.CloudIdentity$findingsArgs<ExtArgs>
+  iamRemediationApprovals?: boolean | Prisma.CloudIdentity$iamRemediationApprovalsArgs<ExtArgs>
   _count?: boolean | Prisma.CloudIdentityCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CloudIdentityIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -952,6 +1076,7 @@ export type $CloudIdentityPayload<ExtArgs extends runtime.Types.Extensions.Inter
     cloudAccount: Prisma.$CloudAccountPayload<ExtArgs>
     roleAssignments: Prisma.$CloudRoleAssignmentPayload<ExtArgs>[]
     findings: Prisma.$SecurityFindingPayload<ExtArgs>[]
+    iamRemediationApprovals: Prisma.$IamRemediationApprovalPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1362,6 +1487,7 @@ export interface Prisma__CloudIdentityClient<T, Null = never, ExtArgs extends ru
   cloudAccount<T extends Prisma.CloudAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__CloudAccountClient<runtime.Types.Result.GetResult<Prisma.$CloudAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   roleAssignments<T extends Prisma.CloudIdentity$roleAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudIdentity$roleAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CloudRoleAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   findings<T extends Prisma.CloudIdentity$findingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudIdentity$findingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SecurityFindingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  iamRemediationApprovals<T extends Prisma.CloudIdentity$iamRemediationApprovalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudIdentity$iamRemediationApprovalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IamRemediationApprovalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1848,6 +1974,30 @@ export type CloudIdentity$findingsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.SecurityFindingScalarFieldEnum | Prisma.SecurityFindingScalarFieldEnum[]
+}
+
+/**
+ * CloudIdentity.iamRemediationApprovals
+ */
+export type CloudIdentity$iamRemediationApprovalsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IamRemediationApproval
+   */
+  select?: Prisma.IamRemediationApprovalSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IamRemediationApproval
+   */
+  omit?: Prisma.IamRemediationApprovalOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IamRemediationApprovalInclude<ExtArgs> | null
+  where?: Prisma.IamRemediationApprovalWhereInput
+  orderBy?: Prisma.IamRemediationApprovalOrderByWithRelationInput | Prisma.IamRemediationApprovalOrderByWithRelationInput[]
+  cursor?: Prisma.IamRemediationApprovalWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IamRemediationApprovalScalarFieldEnum | Prisma.IamRemediationApprovalScalarFieldEnum[]
 }
 
 /**

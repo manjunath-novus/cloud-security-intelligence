@@ -53,6 +53,12 @@ export type SecurityFinding = Prisma.SecurityFindingModel
  */
 export type SecurityFindingEvent = Prisma.SecurityFindingEventModel
 /**
- * Model IamRiskScan *
- * */
+ * Model IamRiskScan
+ *
+ */
 export type IamRiskScan = Prisma.IamRiskScanModel
+/**
+ * Model IamRemediationApproval
+ *
+ */
+export type IamRemediationApproval = Prisma.IamRemediationApprovalModel

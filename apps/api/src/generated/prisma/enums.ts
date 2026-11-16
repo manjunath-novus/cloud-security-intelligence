@@ -45,3 +45,21 @@ export const CloudIdentityType = {
 } as const
 
 export type CloudIdentityType = (typeof CloudIdentityType)[keyof typeof CloudIdentityType]
+
+
+export const IamRemediationApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type IamRemediationApprovalStatus = (typeof IamRemediationApprovalStatus)[keyof typeof IamRemediationApprovalStatus]
+
+
+export const IamRemediationApprovalAction = {
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT'
+} as const
+
+export type IamRemediationApprovalAction = (typeof IamRemediationApprovalAction)[keyof typeof IamRemediationApprovalAction]

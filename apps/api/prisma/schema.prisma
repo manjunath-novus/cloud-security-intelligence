@@ -33,20 +33,33 @@ enum CloudIdentityType {
   MANAGED_IDENTITY
 }
 
+enum IamRemediationApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum IamRemediationApprovalAction {
+  APPROVE
+  REJECT
+}
+
 model CloudAccount {
-  id              String                @id @default(uuid())
-  name            String
-  provider        String
-  accountId       String
-  environment     String                @default("development")
-  region          String?
-  isActive        Boolean               @default(true)
-  createdAt       DateTime              @default(now())
-  updatedAt       DateTime              @updatedAt
-  identities      CloudIdentity[]
-  roleDefinitions CloudRoleDefinition[]
-  roleAssignments CloudRoleAssignment[]
-  iamRiskScans    IamRiskScan[]
+  id                      String                   @id @default(uuid())
+  name                    String
+  provider                String
+  accountId               String
+  environment             String                   @default("development")
+  region                  String?
+  isActive                Boolean                  @default(true)
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  identities              CloudIdentity[]
+  roleDefinitions         CloudRoleDefinition[]
+  roleAssignments         CloudRoleAssignment[]
+  iamRiskScans            IamRiskScan[]
+  iamRemediationApprovals IamRemediationApproval[]
 
   resources CloudResource[]
 
@@ -92,9 +105,10 @@ model CloudIdentity {
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
 
-  cloudAccount    CloudAccount          @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
-  roleAssignments CloudRoleAssignment[]
-  findings        SecurityFinding[]
+  cloudAccount            CloudAccount             @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+  roleAssignments         CloudRoleAssignment[]
+  findings                SecurityFinding[]
+  iamRemediationApprovals IamRemediationApproval[]
 
   @@unique([cloudAccountId, providerIdentityId])
   @@index([cloudAccountId])
@@ -200,28 +214,62 @@ model SecurityFindingEvent {
   @@index([eventType])
   @@index([actorId])
 }
+
 model IamRiskScan {
-  id                  String   @id @default(uuid())
-  cloudAccountId      String
+  id             String @id @default(uuid())
+  cloudAccountId String
 
-  riskScore           Int
-  rawRiskScore        Int
-  riskLevel           String
+  riskScore    Int
+  rawRiskScore Int
+  riskLevel    String
 
-  riskExposureCount   Int
+  riskExposureCount    Int
   detectedFindingCount Int
 
-  severityBreakdown   Json
-  severityPoints      Json
+  severityBreakdown Json
+  severityPoints    Json
 
-  identitiesScanned   Int
-  assignmentsScanned  Int
+  identitiesScanned  Int
+  assignmentsScanned Int
 
-  riskScoreWasCapped  Boolean  @default(false)
+  riskScoreWasCapped Boolean @default(false)
 
-  createdAt           DateTime @default(now())
+  createdAt DateTime @default(now())
 
   cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
 
   @@index([cloudAccountId, createdAt])
+}
+
+model IamRemediationApproval {
+  id              String @id @default(uuid())
+  cloudAccountId  String
+  cloudIdentityId String
+
+  ruleId              String
+  recommendationTitle String
+
+  requestedBy String
+  reviewedBy  String?
+
+  status IamRemediationApprovalStatus @default(PENDING)
+
+  requestReason String
+  reviewComment String?
+
+  requestedAt DateTime  @default(now())
+  reviewedAt  DateTime?
+  cancelledAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cloudAccount  CloudAccount  @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+  cloudIdentity CloudIdentity @relation(fields: [cloudIdentityId], references: [id], onDelete: Cascade)
+
+  @@index([cloudAccountId, status])
+  @@index([cloudIdentityId])
+  @@index([requestedBy])
+  @@index([reviewedBy])
+  @@index([status, requestedAt])
 }
