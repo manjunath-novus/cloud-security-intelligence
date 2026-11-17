@@ -1,4 +1,3 @@
-
 import { Router } from "express";
 import { z } from "zod";
 import { prisma } from "../db.js";
@@ -12,7 +11,7 @@ const router = Router();
 const accountIdSchema = z.string().uuid();
 
 const accountQuerySchema = z.object({
-  cloudAccountId: accountIdSchema
+  cloudAccountId: accountIdSchema,
 });
 
 const createApprovalSchema = z.object({
@@ -21,23 +20,33 @@ const createApprovalSchema = z.object({
   ruleId: z.string().min(1).max(100),
   recommendationTitle: z.string().min(1).max(200),
   requestedBy: z.string().min(1).max(100),
-  requestReason: z.string().min(10).max(1000)
+  requestReason: z.string().min(10).max(1000),
 });
 
 const approvalDecisionSchema = z.object({
   action: z.enum(["APPROVE", "REJECT"]),
   reviewedBy: z.string().min(1).max(100),
-  reviewComment: z.string().max(1000).optional()
+  reviewComment: z.string().max(1000).optional(),
+});
+
+const createVerificationSchema = z.object({
+  verifiedBy: z.string().min(1).max(100),
+  evidence: z.string().max(2000).optional(),
+  notes: z.string().max(1000).optional(),
+});
+
+const updateVerificationSchema = z.object({
+  status: z.enum(["SUCCESSFUL", "FAILED"]),
+  evidence: z.string().max(2000).optional(),
+  notes: z.string().max(1000).optional(),
 });
 // GET /api/iam/history/:cloudAccountId
 router.get("/history/:cloudAccountId", async (req, res) => {
-  const validation = accountIdSchema.safeParse(
-    req.params.cloudAccountId
-  );
+  const validation = accountIdSchema.safeParse(req.params.cloudAccountId);
 
   if (!validation.success) {
     return res.status(400).json({
-      error: "Invalid cloud account ID."
+      error: "Invalid cloud account ID.",
     });
   }
 
@@ -48,20 +57,20 @@ router.get("/history/:cloudAccountId", async (req, res) => {
       where: { id: cloudAccountId },
       select: {
         id: true,
-        name: true
-      }
+        name: true,
+      },
     });
 
     if (!account) {
       return res.status(404).json({
-        error: "Cloud account not found."
+        error: "Cloud account not found.",
       });
     }
 
     const scans = await prisma.iamRiskScan.findMany({
       where: { cloudAccountId },
       orderBy: { createdAt: "desc" },
-      take: 20
+      take: 20,
     });
 
     const latest = scans[0];
@@ -84,20 +93,18 @@ router.get("/history/:cloudAccountId", async (req, res) => {
     console.error("Failed to retrieve IAM scan history:", error);
 
     return res.status(500).json({
-      error: "Unable to retrieve IAM scan history."
+      error: "Unable to retrieve IAM scan history.",
     });
   }
 });
 
 // POST /api/iam/discover/:cloudAccountId
 router.post("/discover/:cloudAccountId", async (req, res) => {
-  const validation = accountIdSchema.safeParse(
-    req.params.cloudAccountId
-  );
+  const validation = accountIdSchema.safeParse(req.params.cloudAccountId);
 
   if (!validation.success) {
     return res.status(400).json({
-      error: "Invalid cloud account ID."
+      error: "Invalid cloud account ID.",
     });
   }
 
@@ -106,7 +113,7 @@ router.post("/discover/:cloudAccountId", async (req, res) => {
 
     return res.status(200).json({
       message: "IAM discovery completed successfully.",
-      discovery
+      discovery,
     });
   } catch (error) {
     const message =
@@ -126,7 +133,7 @@ router.post("/discover/:cloudAccountId", async (req, res) => {
     console.error("IAM discovery failed:", error);
 
     return res.status(500).json({
-      error: "Unable to complete IAM discovery."
+      error: "Unable to complete IAM discovery.",
     });
   }
 });
@@ -142,9 +149,7 @@ router.post("/scan/:cloudAccountId", async (req, res) => {
     });
   } catch (error) {
     const message =
-      error instanceof Error
-        ? error.message
-        : "Failed to scan IAM security.";
+      error instanceof Error ? error.message : "Failed to scan IAM security.";
 
     const status =
       message === "Cloud account not found"
@@ -163,36 +168,36 @@ router.get("/identities", async (req, res) => {
 
   if (!validation.success) {
     return res.status(400).json({
-      error: "A valid cloudAccountId is required."
+      error: "A valid cloudAccountId is required.",
     });
   }
 
   try {
     const identities = await prisma.cloudIdentity.findMany({
       where: {
-        cloudAccountId: validation.data.cloudAccountId
+        cloudAccountId: validation.data.cloudAccountId,
       },
       include: {
         roleAssignments: {
           include: {
-            cloudRoleDefinition: true
-          }
-        }
+            cloudRoleDefinition: true,
+          },
+        },
       },
       orderBy: {
-        displayName: "asc"
-      }
+        displayName: "asc",
+      },
     });
 
     return res.status(200).json({
       identities,
-      total: identities.length
+      total: identities.length,
     });
   } catch (error) {
     console.error("Failed to retrieve IAM identities:", error);
 
     return res.status(500).json({
-      error: "Unable to retrieve IAM identities."
+      error: "Unable to retrieve IAM identities.",
     });
   }
 });
@@ -209,7 +214,7 @@ router.get("/permission-analysis", async (req, res) => {
 
   try {
     const analysis = await getPermissionIntelligence(
-      validation.data.cloudAccountId
+      validation.data.cloudAccountId,
     );
 
     return res.status(200).json({
@@ -244,36 +249,36 @@ router.get("/roles", async (req, res) => {
 
   if (!validation.success) {
     return res.status(400).json({
-      error: "A valid cloudAccountId is required."
+      error: "A valid cloudAccountId is required.",
     });
   }
 
   try {
     const roles = await prisma.cloudRoleDefinition.findMany({
       where: {
-        cloudAccountId: validation.data.cloudAccountId
+        cloudAccountId: validation.data.cloudAccountId,
       },
       include: {
         _count: {
           select: {
-            roleAssignments: true
-          }
-        }
+            roleAssignments: true,
+          },
+        },
       },
       orderBy: {
-        name: "asc"
-      }
+        name: "asc",
+      },
     });
 
     return res.status(200).json({
       roles,
-      total: roles.length
+      total: roles.length,
     });
   } catch (error) {
     console.error("Failed to retrieve IAM roles:", error);
 
     return res.status(500).json({
-      error: "Unable to retrieve IAM roles."
+      error: "Unable to retrieve IAM roles.",
     });
   }
 });
@@ -284,33 +289,33 @@ router.get("/assignments", async (req, res) => {
 
   if (!validation.success) {
     return res.status(400).json({
-      error: "A valid cloudAccountId is required."
+      error: "A valid cloudAccountId is required.",
     });
   }
 
   try {
     const assignments = await prisma.cloudRoleAssignment.findMany({
       where: {
-        cloudAccountId: validation.data.cloudAccountId
+        cloudAccountId: validation.data.cloudAccountId,
       },
       include: {
         cloudIdentity: true,
-        cloudRoleDefinition: true
+        cloudRoleDefinition: true,
       },
       orderBy: {
-        createdAt: "desc"
-      }
+        createdAt: "desc",
+      },
     });
 
     return res.status(200).json({
       assignments,
-      total: assignments.length
+      total: assignments.length,
     });
   } catch (error) {
     console.error("Failed to retrieve IAM assignments:", error);
 
     return res.status(500).json({
-      error: "Unable to retrieve IAM assignments."
+      error: "Unable to retrieve IAM assignments.",
     });
   }
 });
@@ -322,7 +327,7 @@ router.post("/approvals", async (req, res) => {
   if (!validation.success) {
     return res.status(400).json({
       error: "Invalid approval request.",
-      details: validation.error.flatten()
+      details: validation.error.flatten(),
     });
   }
 
@@ -333,32 +338,32 @@ router.post("/approvals", async (req, res) => {
       ruleId,
       recommendationTitle,
       requestedBy,
-      requestReason
+      requestReason,
     } = validation.data;
 
     const [account, identity] = await Promise.all([
       prisma.cloudAccount.findUnique({
         where: { id: cloudAccountId },
-        select: { id: true }
+        select: { id: true },
       }),
       prisma.cloudIdentity.findFirst({
         where: {
           id: cloudIdentityId,
-          cloudAccountId
+          cloudAccountId,
         },
-        select: { id: true }
-      })
+        select: { id: true },
+      }),
     ]);
 
     if (!account) {
       return res.status(404).json({
-        error: "Cloud account not found."
+        error: "Cloud account not found.",
       });
     }
 
     if (!identity) {
       return res.status(404).json({
-        error: "Cloud identity not found in this cloud account."
+        error: "Cloud identity not found in this cloud account.",
       });
     }
 
@@ -369,19 +374,19 @@ router.post("/approvals", async (req, res) => {
         ruleId,
         recommendationTitle,
         requestedBy,
-        requestReason
-      }
+        requestReason,
+      },
     });
 
     return res.status(201).json({
       message: "Remediation approval request created successfully.",
-      approval
+      approval,
     });
   } catch (error) {
     console.error("Failed to create remediation approval:", error);
 
     return res.status(500).json({
-      error: "Unable to create remediation approval request."
+      error: "Unable to create remediation approval request.",
     });
   }
 });
@@ -391,38 +396,38 @@ router.get("/approvals", async (req, res) => {
 
   if (!validation.success) {
     return res.status(400).json({
-      error: "A valid cloudAccountId is required."
+      error: "A valid cloudAccountId is required.",
     });
   }
 
   try {
     const approvals = await prisma.iamRemediationApproval.findMany({
       where: {
-        cloudAccountId: validation.data.cloudAccountId
+        cloudAccountId: validation.data.cloudAccountId,
       },
       include: {
-      cloudIdentity: {
-      select: {
-      id: true,
-      displayName: true,
-      identityType: true
-    }
-  }
-},
+        cloudIdentity: {
+          select: {
+            id: true,
+            displayName: true,
+            identityType: true,
+          },
+        },
+      },
       orderBy: {
-        requestedAt: "desc"
-      }
+        requestedAt: "desc",
+      },
     });
 
     return res.status(200).json({
       approvals,
-      total: approvals.length
+      total: approvals.length,
     });
   } catch (error) {
     console.error("Failed to retrieve remediation approvals:", error);
 
     return res.status(500).json({
-      error: "Unable to retrieve remediation approvals."
+      error: "Unable to retrieve remediation approvals.",
     });
   }
 });
@@ -434,7 +439,7 @@ router.patch("/approvals/:id/decision", async (req, res) => {
 
   if (!idValidation.success || !bodyValidation.success) {
     return res.status(400).json({
-      error: "Invalid approval decision request."
+      error: "Invalid approval decision request.",
     });
   }
 
@@ -443,7 +448,7 @@ router.patch("/approvals/:id/decision", async (req, res) => {
 
     const result = await prisma.$transaction(async (tx) => {
       const approval = await tx.iamRemediationApproval.findUnique({
-        where: { id: idValidation.data }
+        where: { id: idValidation.data },
       });
 
       if (!approval) {
@@ -461,67 +466,238 @@ router.patch("/approvals/:id/decision", async (req, res) => {
       const updated = await tx.iamRemediationApproval.updateMany({
         where: {
           id: idValidation.data,
-          status: "PENDING"
+          status: "PENDING",
         },
         data: {
           status: action === "APPROVE" ? "APPROVED" : "REJECTED",
           reviewedBy,
           reviewComment: reviewComment ?? null,
-          reviewedAt: new Date()
-        }
+          reviewedAt: new Date(),
+        },
       });
 
       if (updated.count !== 1) {
         return { type: "CONFLICT" as const };
       }
 
-      const updatedApproval =
-        await tx.iamRemediationApproval.findUnique({
-          where: { id: idValidation.data },
-          include: {
-            cloudIdentity: {
-              select: {
-                id: true,
-                displayName: true,
-                identityType: true
-              }
-            }
-          }
-        });
+      const updatedApproval = await tx.iamRemediationApproval.findUnique({
+        where: { id: idValidation.data },
+        include: {
+          cloudIdentity: {
+            select: {
+              id: true,
+              displayName: true,
+              identityType: true,
+            },
+          },
+        },
+      });
 
       return {
         type: "SUCCESS" as const,
-        approval: updatedApproval
+        approval: updatedApproval,
       };
     });
 
     if (result.type === "NOT_FOUND") {
       return res.status(404).json({
-        error: "Approval request not found."
+        error: "Approval request not found.",
       });
     }
 
     if (result.type === "CONFLICT") {
       return res.status(409).json({
-        error: "This approval request has already been decided or cancelled."
+        error: "This approval request has already been decided or cancelled.",
       });
     }
 
     if (result.type === "SELF_REVIEW") {
       return res.status(403).json({
-        error: "Requesters cannot review their own approval requests."
+        error: "Requesters cannot review their own approval requests.",
       });
     }
 
     return res.status(200).json({
       message: `Approval request ${action === "APPROVE" ? "approved" : "rejected"} successfully.`,
-      approval: result.approval
+      approval: result.approval,
     });
   } catch (error) {
     console.error("Failed to process approval decision:", error);
 
     return res.status(500).json({
-      error: "Unable to process approval decision."
+      error: "Unable to process approval decision.",
+    });
+  }
+});
+
+// POST /api/iam/approvals/:id/verifications
+router.post("/approvals/:id/verifications", async (req, res) => {
+  const idValidation = accountIdSchema.safeParse(req.params.id);
+  const bodyValidation = createVerificationSchema.safeParse(req.body);
+
+  if (!idValidation.success || !bodyValidation.success) {
+    return res.status(400).json({
+      error: "Invalid remediation verification request.",
+    });
+  }
+
+  try {
+    const approval = await prisma.iamRemediationApproval.findUnique({
+      where: { id: idValidation.data },
+    });
+
+    if (!approval) {
+      return res.status(404).json({
+        error: "Approval request not found.",
+      });
+    }
+
+    if (approval.status !== "APPROVED") {
+      return res.status(409).json({
+        error: "Only approved remediation requests can be verified.",
+      });
+    }
+
+    const verification = await prisma.iamRemediationVerification.create({
+      data: {
+        approvalId: approval.id,
+        verifiedBy: bodyValidation.data.verifiedBy,
+        evidence: bodyValidation.data.evidence,
+        notes: bodyValidation.data.notes,
+      },
+    });
+
+    return res.status(201).json({
+      message: "Remediation verification record created successfully.",
+      verification,
+    });
+  } catch (error) {
+    console.error("Failed to create remediation verification:", error);
+
+    return res.status(500).json({
+      error: "Unable to create remediation verification record.",
+    });
+  }
+});
+
+// GET /api/iam/approvals/:id/verifications
+router.get("/approvals/:id/verifications", async (req, res) => {
+  const idValidation = accountIdSchema.safeParse(req.params.id);
+
+  if (!idValidation.success) {
+    return res.status(400).json({
+      error: "Invalid approval request ID.",
+    });
+  }
+
+  try {
+    const approval = await prisma.iamRemediationApproval.findUnique({
+      where: { id: idValidation.data },
+      select: { id: true },
+    });
+
+    if (!approval) {
+      return res.status(404).json({
+        error: "Approval request not found.",
+      });
+    }
+
+    const verifications = await prisma.iamRemediationVerification.findMany({
+      where: {
+        approvalId: approval.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return res.status(200).json({
+      verifications,
+      total: verifications.length,
+    });
+  } catch (error) {
+    console.error("Failed to retrieve verification history:", error);
+
+    return res.status(500).json({
+      error: "Unable to retrieve verification history.",
+    });
+  }
+});
+
+// PATCH /api/iam/verifications/:id
+router.patch("/verifications/:id", async (req, res) => {
+  const idValidation = accountIdSchema.safeParse(req.params.id);
+  const bodyValidation = updateVerificationSchema.safeParse(req.body);
+
+  if (!idValidation.success || !bodyValidation.success) {
+    return res.status(400).json({
+      error: "Invalid verification update request.",
+    });
+  }
+
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      const verification = await tx.iamRemediationVerification.findUnique({
+        where: { id: idValidation.data },
+      });
+
+      if (!verification) {
+        return { type: "NOT_FOUND" as const };
+      }
+
+      if (verification.status !== "PENDING") {
+        return { type: "CONFLICT" as const };
+      }
+
+      const updated = await tx.iamRemediationVerification.updateMany({
+        where: {
+          id: idValidation.data,
+          status: "PENDING",
+        },
+        data: {
+          status: bodyValidation.data.status,
+          evidence: bodyValidation.data.evidence,
+          notes: bodyValidation.data.notes,
+          verifiedAt: new Date(),
+        },
+      });
+
+      if (updated.count !== 1) {
+        return { type: "CONFLICT" as const };
+      }
+
+      const updatedVerification =
+        await tx.iamRemediationVerification.findUnique({
+          where: { id: idValidation.data },
+        });
+
+      return {
+        type: "SUCCESS" as const,
+        verification: updatedVerification,
+      };
+    });
+
+    if (result.type === "NOT_FOUND") {
+      return res.status(404).json({
+        error: "Verification record not found.",
+      });
+    }
+
+    if (result.type === "CONFLICT") {
+      return res.status(409).json({
+        error: "Only pending verification records can be updated.",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Remediation verification updated successfully.",
+      verification: result.verification,
+    });
+  } catch (error) {
+    console.error("Failed to update remediation verification:", error);
+
+    return res.status(500).json({
+      error: "Unable to update remediation verification.",
     });
   }
 });
@@ -530,20 +706,22 @@ router.patch("/approvals/:id/decision", async (req, res) => {
 router.patch("/approvals/:id/cancel", async (req, res) => {
   const idValidation = accountIdSchema.safeParse(req.params.id);
 
-  const requesterValidation = z.object({
-    requestedBy: z.string().min(1).max(100)
-  }).safeParse(req.body);
+  const requesterValidation = z
+    .object({
+      requestedBy: z.string().min(1).max(100),
+    })
+    .safeParse(req.body);
 
   if (!idValidation.success || !requesterValidation.success) {
     return res.status(400).json({
-      error: "Invalid approval cancellation request."
+      error: "Invalid approval cancellation request.",
     });
   }
 
   try {
     const result = await prisma.$transaction(async (tx) => {
       const approval = await tx.iamRemediationApproval.findUnique({
-        where: { id: idValidation.data }
+        where: { id: idValidation.data },
       });
 
       if (!approval) {
@@ -562,12 +740,12 @@ router.patch("/approvals/:id/cancel", async (req, res) => {
         where: {
           id: idValidation.data,
           status: "PENDING",
-          requestedBy: requesterValidation.data.requestedBy
+          requestedBy: requesterValidation.data.requestedBy,
         },
         data: {
           status: "CANCELLED",
-          cancelledAt: new Date()
-        }
+          cancelledAt: new Date(),
+        },
       });
 
       if (updated.count !== 1) {
@@ -577,38 +755,38 @@ router.patch("/approvals/:id/cancel", async (req, res) => {
       return {
         type: "SUCCESS" as const,
         approval: await tx.iamRemediationApproval.findUnique({
-          where: { id: idValidation.data }
-        })
+          where: { id: idValidation.data },
+        }),
       };
     });
 
     if (result.type === "NOT_FOUND") {
       return res.status(404).json({
-        error: "Approval request not found."
+        error: "Approval request not found.",
       });
     }
 
     if (result.type === "FORBIDDEN") {
       return res.status(403).json({
-        error: "Only the original requester can cancel this request."
+        error: "Only the original requester can cancel this request.",
       });
     }
 
     if (result.type === "CONFLICT") {
       return res.status(409).json({
-        error: "Only pending approval requests can be cancelled."
+        error: "Only pending approval requests can be cancelled.",
       });
     }
 
     return res.status(200).json({
       message: "Approval request cancelled successfully.",
-      approval: result.approval
+      approval: result.approval,
     });
   } catch (error) {
     console.error("Failed to cancel approval request:", error);
 
     return res.status(500).json({
-      error: "Unable to cancel approval request."
+      error: "Unable to cancel approval request.",
     });
   }
 });

@@ -59,7 +59,8 @@ export const ModelName = {
   SecurityFinding: 'SecurityFinding',
   SecurityFindingEvent: 'SecurityFindingEvent',
   IamRiskScan: 'IamRiskScan',
-  IamRemediationApproval: 'IamRemediationApproval'
+  IamRemediationApproval: 'IamRemediationApproval',
+  IamRemediationVerification: 'IamRemediationVerification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -237,6 +238,21 @@ export const IamRemediationApprovalScalarFieldEnum = {
 } as const
 
 export type IamRemediationApprovalScalarFieldEnum = (typeof IamRemediationApprovalScalarFieldEnum)[keyof typeof IamRemediationApprovalScalarFieldEnum]
+
+
+export const IamRemediationVerificationScalarFieldEnum = {
+  id: 'id',
+  approvalId: 'approvalId',
+  verifiedBy: 'verifiedBy',
+  status: 'status',
+  evidence: 'evidence',
+  notes: 'notes',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IamRemediationVerificationScalarFieldEnum = (typeof IamRemediationVerificationScalarFieldEnum)[keyof typeof IamRemediationVerificationScalarFieldEnum]
 
 
 export const SortOrder = {

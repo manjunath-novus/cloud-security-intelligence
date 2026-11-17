@@ -57,6 +57,15 @@ export const IamRemediationApprovalStatus = {
 export type IamRemediationApprovalStatus = (typeof IamRemediationApprovalStatus)[keyof typeof IamRemediationApprovalStatus]
 
 
+export const IamRemediationVerificationStatus = {
+  PENDING: 'PENDING',
+  SUCCESSFUL: 'SUCCESSFUL',
+  FAILED: 'FAILED'
+} as const
+
+export type IamRemediationVerificationStatus = (typeof IamRemediationVerificationStatus)[keyof typeof IamRemediationVerificationStatus]
+
+
 export const IamRemediationApprovalAction = {
   APPROVE: 'APPROVE',
   REJECT: 'REJECT'
