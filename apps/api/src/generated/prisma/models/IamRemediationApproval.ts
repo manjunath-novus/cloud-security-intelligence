@@ -262,6 +262,7 @@ export type IamRemediationApprovalWhereInput = {
   cancelledAt?: Prisma.DateTimeNullableFilter<"IamRemediationApproval"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"IamRemediationApproval"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IamRemediationApproval"> | Date | string
+  verifications?: Prisma.IamRemediationVerificationListRelationFilter
   cloudAccount?: Prisma.XOR<Prisma.CloudAccountScalarRelationFilter, Prisma.CloudAccountWhereInput>
   cloudIdentity?: Prisma.XOR<Prisma.CloudIdentityScalarRelationFilter, Prisma.CloudIdentityWhereInput>
 }
@@ -282,6 +283,7 @@ export type IamRemediationApprovalOrderByWithRelationInput = {
   cancelledAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  verifications?: Prisma.IamRemediationVerificationOrderByRelationAggregateInput
   cloudAccount?: Prisma.CloudAccountOrderByWithRelationInput
   cloudIdentity?: Prisma.CloudIdentityOrderByWithRelationInput
 }
@@ -305,6 +307,7 @@ export type IamRemediationApprovalWhereUniqueInput = Prisma.AtLeast<{
   cancelledAt?: Prisma.DateTimeNullableFilter<"IamRemediationApproval"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"IamRemediationApproval"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IamRemediationApproval"> | Date | string
+  verifications?: Prisma.IamRemediationVerificationListRelationFilter
   cloudAccount?: Prisma.XOR<Prisma.CloudAccountScalarRelationFilter, Prisma.CloudAccountWhereInput>
   cloudIdentity?: Prisma.XOR<Prisma.CloudIdentityScalarRelationFilter, Prisma.CloudIdentityWhereInput>
 }, "id">
@@ -365,6 +368,7 @@ export type IamRemediationApprovalCreateInput = {
   cancelledAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifications?: Prisma.IamRemediationVerificationCreateNestedManyWithoutApprovalInput
   cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIamRemediationApprovalsInput
   cloudIdentity: Prisma.CloudIdentityCreateNestedOneWithoutIamRemediationApprovalsInput
 }
@@ -385,6 +389,7 @@ export type IamRemediationApprovalUncheckedCreateInput = {
   cancelledAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifications?: Prisma.IamRemediationVerificationUncheckedCreateNestedManyWithoutApprovalInput
 }
 
 export type IamRemediationApprovalUpdateInput = {
@@ -401,6 +406,7 @@ export type IamRemediationApprovalUpdateInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.IamRemediationVerificationUpdateManyWithoutApprovalNestedInput
   cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput
   cloudIdentity?: Prisma.CloudIdentityUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput
 }
@@ -421,6 +427,7 @@ export type IamRemediationApprovalUncheckedUpdateInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.IamRemediationVerificationUncheckedUpdateManyWithoutApprovalNestedInput
 }
 
 export type IamRemediationApprovalCreateManyInput = {
@@ -539,6 +546,11 @@ export type IamRemediationApprovalMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type IamRemediationApprovalScalarRelationFilter = {
+  is?: Prisma.IamRemediationApprovalWhereInput
+  isNot?: Prisma.IamRemediationApprovalWhereInput
+}
+
 export type IamRemediationApprovalCreateNestedManyWithoutCloudAccountInput = {
   create?: Prisma.XOR<Prisma.IamRemediationApprovalCreateWithoutCloudAccountInput, Prisma.IamRemediationApprovalUncheckedCreateWithoutCloudAccountInput> | Prisma.IamRemediationApprovalCreateWithoutCloudAccountInput[] | Prisma.IamRemediationApprovalUncheckedCreateWithoutCloudAccountInput[]
   connectOrCreate?: Prisma.IamRemediationApprovalCreateOrConnectWithoutCloudAccountInput | Prisma.IamRemediationApprovalCreateOrConnectWithoutCloudAccountInput[]
@@ -627,6 +639,20 @@ export type EnumIamRemediationApprovalStatusFieldUpdateOperationsInput = {
   set?: $Enums.IamRemediationApprovalStatus
 }
 
+export type IamRemediationApprovalCreateNestedOneWithoutVerificationsInput = {
+  create?: Prisma.XOR<Prisma.IamRemediationApprovalCreateWithoutVerificationsInput, Prisma.IamRemediationApprovalUncheckedCreateWithoutVerificationsInput>
+  connectOrCreate?: Prisma.IamRemediationApprovalCreateOrConnectWithoutVerificationsInput
+  connect?: Prisma.IamRemediationApprovalWhereUniqueInput
+}
+
+export type IamRemediationApprovalUpdateOneRequiredWithoutVerificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.IamRemediationApprovalCreateWithoutVerificationsInput, Prisma.IamRemediationApprovalUncheckedCreateWithoutVerificationsInput>
+  connectOrCreate?: Prisma.IamRemediationApprovalCreateOrConnectWithoutVerificationsInput
+  upsert?: Prisma.IamRemediationApprovalUpsertWithoutVerificationsInput
+  connect?: Prisma.IamRemediationApprovalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IamRemediationApprovalUpdateToOneWithWhereWithoutVerificationsInput, Prisma.IamRemediationApprovalUpdateWithoutVerificationsInput>, Prisma.IamRemediationApprovalUncheckedUpdateWithoutVerificationsInput>
+}
+
 export type IamRemediationApprovalCreateWithoutCloudAccountInput = {
   id?: string
   ruleId: string
@@ -641,6 +667,7 @@ export type IamRemediationApprovalCreateWithoutCloudAccountInput = {
   cancelledAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifications?: Prisma.IamRemediationVerificationCreateNestedManyWithoutApprovalInput
   cloudIdentity: Prisma.CloudIdentityCreateNestedOneWithoutIamRemediationApprovalsInput
 }
 
@@ -659,6 +686,7 @@ export type IamRemediationApprovalUncheckedCreateWithoutCloudAccountInput = {
   cancelledAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifications?: Prisma.IamRemediationVerificationUncheckedCreateNestedManyWithoutApprovalInput
 }
 
 export type IamRemediationApprovalCreateOrConnectWithoutCloudAccountInput = {
@@ -722,6 +750,7 @@ export type IamRemediationApprovalCreateWithoutCloudIdentityInput = {
   cancelledAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifications?: Prisma.IamRemediationVerificationCreateNestedManyWithoutApprovalInput
   cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIamRemediationApprovalsInput
 }
 
@@ -740,6 +769,7 @@ export type IamRemediationApprovalUncheckedCreateWithoutCloudIdentityInput = {
   cancelledAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  verifications?: Prisma.IamRemediationVerificationUncheckedCreateNestedManyWithoutApprovalInput
 }
 
 export type IamRemediationApprovalCreateOrConnectWithoutCloudIdentityInput = {
@@ -766,6 +796,94 @@ export type IamRemediationApprovalUpdateWithWhereUniqueWithoutCloudIdentityInput
 export type IamRemediationApprovalUpdateManyWithWhereWithoutCloudIdentityInput = {
   where: Prisma.IamRemediationApprovalScalarWhereInput
   data: Prisma.XOR<Prisma.IamRemediationApprovalUpdateManyMutationInput, Prisma.IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityInput>
+}
+
+export type IamRemediationApprovalCreateWithoutVerificationsInput = {
+  id?: string
+  ruleId: string
+  recommendationTitle: string
+  requestedBy: string
+  reviewedBy?: string | null
+  status?: $Enums.IamRemediationApprovalStatus
+  requestReason: string
+  reviewComment?: string | null
+  requestedAt?: Date | string
+  reviewedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  cloudAccount: Prisma.CloudAccountCreateNestedOneWithoutIamRemediationApprovalsInput
+  cloudIdentity: Prisma.CloudIdentityCreateNestedOneWithoutIamRemediationApprovalsInput
+}
+
+export type IamRemediationApprovalUncheckedCreateWithoutVerificationsInput = {
+  id?: string
+  cloudAccountId: string
+  cloudIdentityId: string
+  ruleId: string
+  recommendationTitle: string
+  requestedBy: string
+  reviewedBy?: string | null
+  status?: $Enums.IamRemediationApprovalStatus
+  requestReason: string
+  reviewComment?: string | null
+  requestedAt?: Date | string
+  reviewedAt?: Date | string | null
+  cancelledAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type IamRemediationApprovalCreateOrConnectWithoutVerificationsInput = {
+  where: Prisma.IamRemediationApprovalWhereUniqueInput
+  create: Prisma.XOR<Prisma.IamRemediationApprovalCreateWithoutVerificationsInput, Prisma.IamRemediationApprovalUncheckedCreateWithoutVerificationsInput>
+}
+
+export type IamRemediationApprovalUpsertWithoutVerificationsInput = {
+  update: Prisma.XOR<Prisma.IamRemediationApprovalUpdateWithoutVerificationsInput, Prisma.IamRemediationApprovalUncheckedUpdateWithoutVerificationsInput>
+  create: Prisma.XOR<Prisma.IamRemediationApprovalCreateWithoutVerificationsInput, Prisma.IamRemediationApprovalUncheckedCreateWithoutVerificationsInput>
+  where?: Prisma.IamRemediationApprovalWhereInput
+}
+
+export type IamRemediationApprovalUpdateToOneWithWhereWithoutVerificationsInput = {
+  where?: Prisma.IamRemediationApprovalWhereInput
+  data: Prisma.XOR<Prisma.IamRemediationApprovalUpdateWithoutVerificationsInput, Prisma.IamRemediationApprovalUncheckedUpdateWithoutVerificationsInput>
+}
+
+export type IamRemediationApprovalUpdateWithoutVerificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleId?: Prisma.StringFieldUpdateOperationsInput | string
+  recommendationTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  requestedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumIamRemediationApprovalStatusFieldUpdateOperationsInput | $Enums.IamRemediationApprovalStatus
+  requestReason?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput
+  cloudIdentity?: Prisma.CloudIdentityUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput
+}
+
+export type IamRemediationApprovalUncheckedUpdateWithoutVerificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  cloudIdentityId?: Prisma.StringFieldUpdateOperationsInput | string
+  ruleId?: Prisma.StringFieldUpdateOperationsInput | string
+  recommendationTitle?: Prisma.StringFieldUpdateOperationsInput | string
+  requestedBy?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumIamRemediationApprovalStatusFieldUpdateOperationsInput | $Enums.IamRemediationApprovalStatus
+  requestReason?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewComment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  requestedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type IamRemediationApprovalCreateManyCloudAccountInput = {
@@ -799,6 +917,7 @@ export type IamRemediationApprovalUpdateWithoutCloudAccountInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.IamRemediationVerificationUpdateManyWithoutApprovalNestedInput
   cloudIdentity?: Prisma.CloudIdentityUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput
 }
 
@@ -817,6 +936,7 @@ export type IamRemediationApprovalUncheckedUpdateWithoutCloudAccountInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.IamRemediationVerificationUncheckedUpdateManyWithoutApprovalNestedInput
 }
 
 export type IamRemediationApprovalUncheckedUpdateManyWithoutCloudAccountInput = {
@@ -867,6 +987,7 @@ export type IamRemediationApprovalUpdateWithoutCloudIdentityInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.IamRemediationVerificationUpdateManyWithoutApprovalNestedInput
   cloudAccount?: Prisma.CloudAccountUpdateOneRequiredWithoutIamRemediationApprovalsNestedInput
 }
 
@@ -885,6 +1006,7 @@ export type IamRemediationApprovalUncheckedUpdateWithoutCloudIdentityInput = {
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  verifications?: Prisma.IamRemediationVerificationUncheckedUpdateManyWithoutApprovalNestedInput
 }
 
 export type IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityInput = {
@@ -905,6 +1027,35 @@ export type IamRemediationApprovalUncheckedUpdateManyWithoutCloudIdentityInput =
 }
 
 
+/**
+ * Count Type IamRemediationApprovalCountOutputType
+ */
+
+export type IamRemediationApprovalCountOutputType = {
+  verifications: number
+}
+
+export type IamRemediationApprovalCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  verifications?: boolean | IamRemediationApprovalCountOutputTypeCountVerificationsArgs
+}
+
+/**
+ * IamRemediationApprovalCountOutputType without action
+ */
+export type IamRemediationApprovalCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IamRemediationApprovalCountOutputType
+   */
+  select?: Prisma.IamRemediationApprovalCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * IamRemediationApprovalCountOutputType without action
+ */
+export type IamRemediationApprovalCountOutputTypeCountVerificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.IamRemediationVerificationWhereInput
+}
+
 
 export type IamRemediationApprovalSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -922,8 +1073,10 @@ export type IamRemediationApprovalSelect<ExtArgs extends runtime.Types.Extension
   cancelledAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  verifications?: boolean | Prisma.IamRemediationApproval$verificationsArgs<ExtArgs>
   cloudAccount?: boolean | Prisma.CloudAccountDefaultArgs<ExtArgs>
   cloudIdentity?: boolean | Prisma.CloudIdentityDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.IamRemediationApprovalCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["iamRemediationApproval"]>
 
 export type IamRemediationApprovalSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -986,8 +1139,10 @@ export type IamRemediationApprovalSelectScalar = {
 
 export type IamRemediationApprovalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cloudAccountId" | "cloudIdentityId" | "ruleId" | "recommendationTitle" | "requestedBy" | "reviewedBy" | "status" | "requestReason" | "reviewComment" | "requestedAt" | "reviewedAt" | "cancelledAt" | "createdAt" | "updatedAt", ExtArgs["result"]["iamRemediationApproval"]>
 export type IamRemediationApprovalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  verifications?: boolean | Prisma.IamRemediationApproval$verificationsArgs<ExtArgs>
   cloudAccount?: boolean | Prisma.CloudAccountDefaultArgs<ExtArgs>
   cloudIdentity?: boolean | Prisma.CloudIdentityDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.IamRemediationApprovalCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type IamRemediationApprovalIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   cloudAccount?: boolean | Prisma.CloudAccountDefaultArgs<ExtArgs>
@@ -1001,6 +1156,7 @@ export type IamRemediationApprovalIncludeUpdateManyAndReturn<ExtArgs extends run
 export type $IamRemediationApprovalPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "IamRemediationApproval"
   objects: {
+    verifications: Prisma.$IamRemediationVerificationPayload<ExtArgs>[]
     cloudAccount: Prisma.$CloudAccountPayload<ExtArgs>
     cloudIdentity: Prisma.$CloudIdentityPayload<ExtArgs>
   }
@@ -1414,6 +1570,7 @@ readonly fields: IamRemediationApprovalFieldRefs;
  */
 export interface Prisma__IamRemediationApprovalClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  verifications<T extends Prisma.IamRemediationApproval$verificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.IamRemediationApproval$verificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IamRemediationVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   cloudAccount<T extends Prisma.CloudAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__CloudAccountClient<runtime.Types.Result.GetResult<Prisma.$CloudAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   cloudIdentity<T extends Prisma.CloudIdentityDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudIdentityDefaultArgs<ExtArgs>>): Prisma.Prisma__CloudIdentityClient<runtime.Types.Result.GetResult<Prisma.$CloudIdentityPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1858,6 +2015,30 @@ export type IamRemediationApprovalDeleteManyArgs<ExtArgs extends runtime.Types.E
    * Limit how many IamRemediationApprovals to delete.
    */
   limit?: number
+}
+
+/**
+ * IamRemediationApproval.verifications
+ */
+export type IamRemediationApproval$verificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the IamRemediationVerification
+   */
+  select?: Prisma.IamRemediationVerificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the IamRemediationVerification
+   */
+  omit?: Prisma.IamRemediationVerificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IamRemediationVerificationInclude<ExtArgs> | null
+  where?: Prisma.IamRemediationVerificationWhereInput
+  orderBy?: Prisma.IamRemediationVerificationOrderByWithRelationInput | Prisma.IamRemediationVerificationOrderByWithRelationInput[]
+  cursor?: Prisma.IamRemediationVerificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.IamRemediationVerificationScalarFieldEnum | Prisma.IamRemediationVerificationScalarFieldEnum[]
 }
 
 /**

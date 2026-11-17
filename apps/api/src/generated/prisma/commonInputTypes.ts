@@ -328,6 +328,23 @@ export type EnumIamRemediationApprovalStatusWithAggregatesFilter<$PrismaModel = 
   _max?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
 }
 
+export type EnumIamRemediationVerificationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationVerificationStatus | Prisma.EnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel> | $Enums.IamRemediationVerificationStatus
+}
+
+export type EnumIamRemediationVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationVerificationStatus | Prisma.EnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.IamRemediationVerificationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -626,6 +643,23 @@ export type NestedEnumIamRemediationApprovalStatusWithAggregatesFilter<$PrismaMo
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumIamRemediationApprovalStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationVerificationStatus | Prisma.EnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel> | $Enums.IamRemediationVerificationStatus
+}
+
+export type NestedEnumIamRemediationVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.IamRemediationVerificationStatus | Prisma.EnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.IamRemediationVerificationStatus[] | Prisma.ListEnumIamRemediationVerificationStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumIamRemediationVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.IamRemediationVerificationStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumIamRemediationVerificationStatusFilter<$PrismaModel>
 }
 
 

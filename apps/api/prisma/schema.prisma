@@ -40,6 +40,12 @@ enum IamRemediationApprovalStatus {
   CANCELLED
 }
 
+enum IamRemediationVerificationStatus {
+  PENDING
+  SUCCESSFUL
+  FAILED
+}
+
 enum IamRemediationApprovalAction {
   APPROVE
   REJECT
@@ -252,7 +258,8 @@ model IamRemediationApproval {
   requestedBy String
   reviewedBy  String?
 
-  status IamRemediationApprovalStatus @default(PENDING)
+  verifications IamRemediationVerification[]
+  status        IamRemediationApprovalStatus @default(PENDING)
 
   requestReason String
   reviewComment String?
@@ -272,4 +279,27 @@ model IamRemediationApproval {
   @@index([requestedBy])
   @@index([reviewedBy])
   @@index([status, requestedAt])
+}
+
+model IamRemediationVerification {
+  id         String @id @default(uuid())
+  approvalId String
+
+  verifiedBy String
+
+  status IamRemediationVerificationStatus @default(PENDING)
+
+  evidence String?
+  notes    String?
+
+  verifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  approval IamRemediationApproval @relation(fields: [approvalId], references: [id], onDelete: Cascade)
+
+  @@index([approvalId, status])
+  @@index([verifiedBy])
+  @@index([status, createdAt])
 }
