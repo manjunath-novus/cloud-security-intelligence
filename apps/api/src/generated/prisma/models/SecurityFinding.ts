@@ -693,10 +693,6 @@ export type EnumFindingStatusFieldUpdateOperationsInput = {
   set?: $Enums.FindingStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type SecurityFindingCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.SecurityFindingCreateWithoutEventsInput, Prisma.SecurityFindingUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.SecurityFindingCreateOrConnectWithoutEventsInput

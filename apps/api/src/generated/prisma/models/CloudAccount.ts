@@ -26,6 +26,7 @@ export type AggregateCloudAccount = {
 
 export type CloudAccountMinAggregateOutputType = {
   id: string | null
+  organizationId: string | null
   name: string | null
   provider: string | null
   accountId: string | null
@@ -38,6 +39,7 @@ export type CloudAccountMinAggregateOutputType = {
 
 export type CloudAccountMaxAggregateOutputType = {
   id: string | null
+  organizationId: string | null
   name: string | null
   provider: string | null
   accountId: string | null
@@ -50,6 +52,7 @@ export type CloudAccountMaxAggregateOutputType = {
 
 export type CloudAccountCountAggregateOutputType = {
   id: number
+  organizationId: number
   name: number
   provider: number
   accountId: number
@@ -64,6 +67,7 @@ export type CloudAccountCountAggregateOutputType = {
 
 export type CloudAccountMinAggregateInputType = {
   id?: true
+  organizationId?: true
   name?: true
   provider?: true
   accountId?: true
@@ -76,6 +80,7 @@ export type CloudAccountMinAggregateInputType = {
 
 export type CloudAccountMaxAggregateInputType = {
   id?: true
+  organizationId?: true
   name?: true
   provider?: true
   accountId?: true
@@ -88,6 +93,7 @@ export type CloudAccountMaxAggregateInputType = {
 
 export type CloudAccountCountAggregateInputType = {
   id?: true
+  organizationId?: true
   name?: true
   provider?: true
   accountId?: true
@@ -173,6 +179,7 @@ export type CloudAccountGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type CloudAccountGroupByOutputType = {
   id: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -206,6 +213,7 @@ export type CloudAccountWhereInput = {
   OR?: Prisma.CloudAccountWhereInput[]
   NOT?: Prisma.CloudAccountWhereInput | Prisma.CloudAccountWhereInput[]
   id?: Prisma.StringFilter<"CloudAccount"> | string
+  organizationId?: Prisma.StringFilter<"CloudAccount"> | string
   name?: Prisma.StringFilter<"CloudAccount"> | string
   provider?: Prisma.StringFilter<"CloudAccount"> | string
   accountId?: Prisma.StringFilter<"CloudAccount"> | string
@@ -214,6 +222,7 @@ export type CloudAccountWhereInput = {
   isActive?: Prisma.BoolFilter<"CloudAccount"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CloudAccount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CloudAccount"> | Date | string
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   identities?: Prisma.CloudIdentityListRelationFilter
   roleDefinitions?: Prisma.CloudRoleDefinitionListRelationFilter
   roleAssignments?: Prisma.CloudRoleAssignmentListRelationFilter
@@ -224,6 +233,7 @@ export type CloudAccountWhereInput = {
 
 export type CloudAccountOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
@@ -232,6 +242,7 @@ export type CloudAccountOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  organization?: Prisma.OrganizationOrderByWithRelationInput
   identities?: Prisma.CloudIdentityOrderByRelationAggregateInput
   roleDefinitions?: Prisma.CloudRoleDefinitionOrderByRelationAggregateInput
   roleAssignments?: Prisma.CloudRoleAssignmentOrderByRelationAggregateInput
@@ -242,9 +253,11 @@ export type CloudAccountOrderByWithRelationInput = {
 
 export type CloudAccountWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  organizationId_provider_accountId?: Prisma.CloudAccountOrganizationIdProviderAccountIdCompoundUniqueInput
   AND?: Prisma.CloudAccountWhereInput | Prisma.CloudAccountWhereInput[]
   OR?: Prisma.CloudAccountWhereInput[]
   NOT?: Prisma.CloudAccountWhereInput | Prisma.CloudAccountWhereInput[]
+  organizationId?: Prisma.StringFilter<"CloudAccount"> | string
   name?: Prisma.StringFilter<"CloudAccount"> | string
   provider?: Prisma.StringFilter<"CloudAccount"> | string
   accountId?: Prisma.StringFilter<"CloudAccount"> | string
@@ -253,16 +266,18 @@ export type CloudAccountWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"CloudAccount"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CloudAccount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CloudAccount"> | Date | string
+  organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   identities?: Prisma.CloudIdentityListRelationFilter
   roleDefinitions?: Prisma.CloudRoleDefinitionListRelationFilter
   roleAssignments?: Prisma.CloudRoleAssignmentListRelationFilter
   iamRiskScans?: Prisma.IamRiskScanListRelationFilter
   iamRemediationApprovals?: Prisma.IamRemediationApprovalListRelationFilter
   resources?: Prisma.CloudResourceListRelationFilter
-}, "id">
+}, "id" | "organizationId_provider_accountId">
 
 export type CloudAccountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
@@ -281,6 +296,7 @@ export type CloudAccountScalarWhereWithAggregatesInput = {
   OR?: Prisma.CloudAccountScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CloudAccountScalarWhereWithAggregatesInput | Prisma.CloudAccountScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"CloudAccount"> | string
+  organizationId?: Prisma.StringWithAggregatesFilter<"CloudAccount"> | string
   name?: Prisma.StringWithAggregatesFilter<"CloudAccount"> | string
   provider?: Prisma.StringWithAggregatesFilter<"CloudAccount"> | string
   accountId?: Prisma.StringWithAggregatesFilter<"CloudAccount"> | string
@@ -301,6 +317,7 @@ export type CloudAccountCreateInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
   identities?: Prisma.CloudIdentityCreateNestedManyWithoutCloudAccountInput
   roleDefinitions?: Prisma.CloudRoleDefinitionCreateNestedManyWithoutCloudAccountInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
@@ -311,6 +328,7 @@ export type CloudAccountCreateInput = {
 
 export type CloudAccountUncheckedCreateInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -337,6 +355,7 @@ export type CloudAccountUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
   roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
@@ -347,6 +366,7 @@ export type CloudAccountUpdateInput = {
 
 export type CloudAccountUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -365,6 +385,7 @@ export type CloudAccountUncheckedUpdateInput = {
 
 export type CloudAccountCreateManyInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -389,6 +410,7 @@ export type CloudAccountUpdateManyMutationInput = {
 
 export type CloudAccountUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -399,8 +421,25 @@ export type CloudAccountUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type CloudAccountListRelationFilter = {
+  every?: Prisma.CloudAccountWhereInput
+  some?: Prisma.CloudAccountWhereInput
+  none?: Prisma.CloudAccountWhereInput
+}
+
+export type CloudAccountOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type CloudAccountOrganizationIdProviderAccountIdCompoundUniqueInput = {
+  organizationId: string
+  provider: string
+  accountId: string
+}
+
 export type CloudAccountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
@@ -413,6 +452,7 @@ export type CloudAccountCountOrderByAggregateInput = {
 
 export type CloudAccountMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
@@ -425,6 +465,7 @@ export type CloudAccountMaxOrderByAggregateInput = {
 
 export type CloudAccountMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  organizationId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   provider?: Prisma.SortOrder
   accountId?: Prisma.SortOrder
@@ -440,20 +481,50 @@ export type CloudAccountScalarRelationFilter = {
   isNot?: Prisma.CloudAccountWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type CloudAccountCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.CloudAccountCreateWithoutOrganizationInput, Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput> | Prisma.CloudAccountCreateWithoutOrganizationInput[] | Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput | Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.CloudAccountCreateManyOrganizationInputEnvelope
+  connect?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
+export type CloudAccountUncheckedCreateNestedManyWithoutOrganizationInput = {
+  create?: Prisma.XOR<Prisma.CloudAccountCreateWithoutOrganizationInput, Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput> | Prisma.CloudAccountCreateWithoutOrganizationInput[] | Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput | Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput[]
+  createMany?: Prisma.CloudAccountCreateManyOrganizationInputEnvelope
+  connect?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+}
+
+export type CloudAccountUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.CloudAccountCreateWithoutOrganizationInput, Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput> | Prisma.CloudAccountCreateWithoutOrganizationInput[] | Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput | Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.CloudAccountUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.CloudAccountUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.CloudAccountCreateManyOrganizationInputEnvelope
+  set?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  disconnect?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  delete?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  connect?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  update?: Prisma.CloudAccountUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.CloudAccountUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.CloudAccountUpdateManyWithWhereWithoutOrganizationInput | Prisma.CloudAccountUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.CloudAccountScalarWhereInput | Prisma.CloudAccountScalarWhereInput[]
+}
+
+export type CloudAccountUncheckedUpdateManyWithoutOrganizationNestedInput = {
+  create?: Prisma.XOR<Prisma.CloudAccountCreateWithoutOrganizationInput, Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput> | Prisma.CloudAccountCreateWithoutOrganizationInput[] | Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput[]
+  connectOrCreate?: Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput | Prisma.CloudAccountCreateOrConnectWithoutOrganizationInput[]
+  upsert?: Prisma.CloudAccountUpsertWithWhereUniqueWithoutOrganizationInput | Prisma.CloudAccountUpsertWithWhereUniqueWithoutOrganizationInput[]
+  createMany?: Prisma.CloudAccountCreateManyOrganizationInputEnvelope
+  set?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  disconnect?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  delete?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  connect?: Prisma.CloudAccountWhereUniqueInput | Prisma.CloudAccountWhereUniqueInput[]
+  update?: Prisma.CloudAccountUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.CloudAccountUpdateWithWhereUniqueWithoutOrganizationInput[]
+  updateMany?: Prisma.CloudAccountUpdateManyWithWhereWithoutOrganizationInput | Prisma.CloudAccountUpdateManyWithWhereWithoutOrganizationInput[]
+  deleteMany?: Prisma.CloudAccountScalarWhereInput | Prisma.CloudAccountScalarWhereInput[]
 }
 
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
 }
 
 export type CloudAccountCreateNestedOneWithoutResourcesInput = {
@@ -540,7 +611,7 @@ export type CloudAccountUpdateOneRequiredWithoutIamRemediationApprovalsNestedInp
   update?: Prisma.XOR<Prisma.XOR<Prisma.CloudAccountUpdateToOneWithWhereWithoutIamRemediationApprovalsInput, Prisma.CloudAccountUpdateWithoutIamRemediationApprovalsInput>, Prisma.CloudAccountUncheckedUpdateWithoutIamRemediationApprovalsInput>
 }
 
-export type CloudAccountCreateWithoutResourcesInput = {
+export type CloudAccountCreateWithoutOrganizationInput = {
   id?: string
   name: string
   provider: string
@@ -555,10 +626,90 @@ export type CloudAccountCreateWithoutResourcesInput = {
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
   iamRiskScans?: Prisma.IamRiskScanCreateNestedManyWithoutCloudAccountInput
   iamRemediationApprovals?: Prisma.IamRemediationApprovalCreateNestedManyWithoutCloudAccountInput
+  resources?: Prisma.CloudResourceCreateNestedManyWithoutCloudAccountInput
+}
+
+export type CloudAccountUncheckedCreateWithoutOrganizationInput = {
+  id?: string
+  name: string
+  provider: string
+  accountId: string
+  environment?: string
+  region?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  identities?: Prisma.CloudIdentityUncheckedCreateNestedManyWithoutCloudAccountInput
+  roleDefinitions?: Prisma.CloudRoleDefinitionUncheckedCreateNestedManyWithoutCloudAccountInput
+  roleAssignments?: Prisma.CloudRoleAssignmentUncheckedCreateNestedManyWithoutCloudAccountInput
+  iamRiskScans?: Prisma.IamRiskScanUncheckedCreateNestedManyWithoutCloudAccountInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedCreateNestedManyWithoutCloudAccountInput
+  resources?: Prisma.CloudResourceUncheckedCreateNestedManyWithoutCloudAccountInput
+}
+
+export type CloudAccountCreateOrConnectWithoutOrganizationInput = {
+  where: Prisma.CloudAccountWhereUniqueInput
+  create: Prisma.XOR<Prisma.CloudAccountCreateWithoutOrganizationInput, Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput>
+}
+
+export type CloudAccountCreateManyOrganizationInputEnvelope = {
+  data: Prisma.CloudAccountCreateManyOrganizationInput | Prisma.CloudAccountCreateManyOrganizationInput[]
+  skipDuplicates?: boolean
+}
+
+export type CloudAccountUpsertWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.CloudAccountWhereUniqueInput
+  update: Prisma.XOR<Prisma.CloudAccountUpdateWithoutOrganizationInput, Prisma.CloudAccountUncheckedUpdateWithoutOrganizationInput>
+  create: Prisma.XOR<Prisma.CloudAccountCreateWithoutOrganizationInput, Prisma.CloudAccountUncheckedCreateWithoutOrganizationInput>
+}
+
+export type CloudAccountUpdateWithWhereUniqueWithoutOrganizationInput = {
+  where: Prisma.CloudAccountWhereUniqueInput
+  data: Prisma.XOR<Prisma.CloudAccountUpdateWithoutOrganizationInput, Prisma.CloudAccountUncheckedUpdateWithoutOrganizationInput>
+}
+
+export type CloudAccountUpdateManyWithWhereWithoutOrganizationInput = {
+  where: Prisma.CloudAccountScalarWhereInput
+  data: Prisma.XOR<Prisma.CloudAccountUpdateManyMutationInput, Prisma.CloudAccountUncheckedUpdateManyWithoutOrganizationInput>
+}
+
+export type CloudAccountScalarWhereInput = {
+  AND?: Prisma.CloudAccountScalarWhereInput | Prisma.CloudAccountScalarWhereInput[]
+  OR?: Prisma.CloudAccountScalarWhereInput[]
+  NOT?: Prisma.CloudAccountScalarWhereInput | Prisma.CloudAccountScalarWhereInput[]
+  id?: Prisma.StringFilter<"CloudAccount"> | string
+  organizationId?: Prisma.StringFilter<"CloudAccount"> | string
+  name?: Prisma.StringFilter<"CloudAccount"> | string
+  provider?: Prisma.StringFilter<"CloudAccount"> | string
+  accountId?: Prisma.StringFilter<"CloudAccount"> | string
+  environment?: Prisma.StringFilter<"CloudAccount"> | string
+  region?: Prisma.StringNullableFilter<"CloudAccount"> | string | null
+  isActive?: Prisma.BoolFilter<"CloudAccount"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"CloudAccount"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"CloudAccount"> | Date | string
+}
+
+export type CloudAccountCreateWithoutResourcesInput = {
+  id?: string
+  name: string
+  provider: string
+  accountId: string
+  environment?: string
+  region?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
+  identities?: Prisma.CloudIdentityCreateNestedManyWithoutCloudAccountInput
+  roleDefinitions?: Prisma.CloudRoleDefinitionCreateNestedManyWithoutCloudAccountInput
+  roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
+  iamRiskScans?: Prisma.IamRiskScanCreateNestedManyWithoutCloudAccountInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalCreateNestedManyWithoutCloudAccountInput
 }
 
 export type CloudAccountUncheckedCreateWithoutResourcesInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -600,6 +751,7 @@ export type CloudAccountUpdateWithoutResourcesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
   roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
@@ -609,6 +761,7 @@ export type CloudAccountUpdateWithoutResourcesInput = {
 
 export type CloudAccountUncheckedUpdateWithoutResourcesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -634,6 +787,7 @@ export type CloudAccountCreateWithoutIdentitiesInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
   roleDefinitions?: Prisma.CloudRoleDefinitionCreateNestedManyWithoutCloudAccountInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
   iamRiskScans?: Prisma.IamRiskScanCreateNestedManyWithoutCloudAccountInput
@@ -643,6 +797,7 @@ export type CloudAccountCreateWithoutIdentitiesInput = {
 
 export type CloudAccountUncheckedCreateWithoutIdentitiesInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -684,6 +839,7 @@ export type CloudAccountUpdateWithoutIdentitiesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
   iamRiskScans?: Prisma.IamRiskScanUpdateManyWithoutCloudAccountNestedInput
@@ -693,6 +849,7 @@ export type CloudAccountUpdateWithoutIdentitiesInput = {
 
 export type CloudAccountUncheckedUpdateWithoutIdentitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -718,6 +875,7 @@ export type CloudAccountCreateWithoutRoleDefinitionsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
   identities?: Prisma.CloudIdentityCreateNestedManyWithoutCloudAccountInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
   iamRiskScans?: Prisma.IamRiskScanCreateNestedManyWithoutCloudAccountInput
@@ -727,6 +885,7 @@ export type CloudAccountCreateWithoutRoleDefinitionsInput = {
 
 export type CloudAccountUncheckedCreateWithoutRoleDefinitionsInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -768,6 +927,7 @@ export type CloudAccountUpdateWithoutRoleDefinitionsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
   iamRiskScans?: Prisma.IamRiskScanUpdateManyWithoutCloudAccountNestedInput
@@ -777,6 +937,7 @@ export type CloudAccountUpdateWithoutRoleDefinitionsInput = {
 
 export type CloudAccountUncheckedUpdateWithoutRoleDefinitionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -802,6 +963,7 @@ export type CloudAccountCreateWithoutRoleAssignmentsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
   identities?: Prisma.CloudIdentityCreateNestedManyWithoutCloudAccountInput
   roleDefinitions?: Prisma.CloudRoleDefinitionCreateNestedManyWithoutCloudAccountInput
   iamRiskScans?: Prisma.IamRiskScanCreateNestedManyWithoutCloudAccountInput
@@ -811,6 +973,7 @@ export type CloudAccountCreateWithoutRoleAssignmentsInput = {
 
 export type CloudAccountUncheckedCreateWithoutRoleAssignmentsInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -852,6 +1015,7 @@ export type CloudAccountUpdateWithoutRoleAssignmentsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
   roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
   iamRiskScans?: Prisma.IamRiskScanUpdateManyWithoutCloudAccountNestedInput
@@ -861,6 +1025,7 @@ export type CloudAccountUpdateWithoutRoleAssignmentsInput = {
 
 export type CloudAccountUncheckedUpdateWithoutRoleAssignmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -886,6 +1051,7 @@ export type CloudAccountCreateWithoutIamRiskScansInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
   identities?: Prisma.CloudIdentityCreateNestedManyWithoutCloudAccountInput
   roleDefinitions?: Prisma.CloudRoleDefinitionCreateNestedManyWithoutCloudAccountInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
@@ -895,6 +1061,7 @@ export type CloudAccountCreateWithoutIamRiskScansInput = {
 
 export type CloudAccountUncheckedCreateWithoutIamRiskScansInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -936,6 +1103,7 @@ export type CloudAccountUpdateWithoutIamRiskScansInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
   roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
@@ -945,6 +1113,7 @@ export type CloudAccountUpdateWithoutIamRiskScansInput = {
 
 export type CloudAccountUncheckedUpdateWithoutIamRiskScansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -970,6 +1139,7 @@ export type CloudAccountCreateWithoutIamRemediationApprovalsInput = {
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutCloudAccountsInput
   identities?: Prisma.CloudIdentityCreateNestedManyWithoutCloudAccountInput
   roleDefinitions?: Prisma.CloudRoleDefinitionCreateNestedManyWithoutCloudAccountInput
   roleAssignments?: Prisma.CloudRoleAssignmentCreateNestedManyWithoutCloudAccountInput
@@ -979,6 +1149,7 @@ export type CloudAccountCreateWithoutIamRemediationApprovalsInput = {
 
 export type CloudAccountUncheckedCreateWithoutIamRemediationApprovalsInput = {
   id?: string
+  organizationId: string
   name: string
   provider: string
   accountId: string
@@ -1020,6 +1191,7 @@ export type CloudAccountUpdateWithoutIamRemediationApprovalsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutCloudAccountsNestedInput
   identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
   roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
   roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
@@ -1029,6 +1201,7 @@ export type CloudAccountUpdateWithoutIamRemediationApprovalsInput = {
 
 export type CloudAccountUncheckedUpdateWithoutIamRemediationApprovalsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
   accountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1042,6 +1215,66 @@ export type CloudAccountUncheckedUpdateWithoutIamRemediationApprovalsInput = {
   roleAssignments?: Prisma.CloudRoleAssignmentUncheckedUpdateManyWithoutCloudAccountNestedInput
   iamRiskScans?: Prisma.IamRiskScanUncheckedUpdateManyWithoutCloudAccountNestedInput
   resources?: Prisma.CloudResourceUncheckedUpdateManyWithoutCloudAccountNestedInput
+}
+
+export type CloudAccountCreateManyOrganizationInput = {
+  id?: string
+  name: string
+  provider: string
+  accountId: string
+  environment?: string
+  region?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CloudAccountUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  environment?: Prisma.StringFieldUpdateOperationsInput | string
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  identities?: Prisma.CloudIdentityUpdateManyWithoutCloudAccountNestedInput
+  roleDefinitions?: Prisma.CloudRoleDefinitionUpdateManyWithoutCloudAccountNestedInput
+  roleAssignments?: Prisma.CloudRoleAssignmentUpdateManyWithoutCloudAccountNestedInput
+  iamRiskScans?: Prisma.IamRiskScanUpdateManyWithoutCloudAccountNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUpdateManyWithoutCloudAccountNestedInput
+  resources?: Prisma.CloudResourceUpdateManyWithoutCloudAccountNestedInput
+}
+
+export type CloudAccountUncheckedUpdateWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  environment?: Prisma.StringFieldUpdateOperationsInput | string
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  identities?: Prisma.CloudIdentityUncheckedUpdateManyWithoutCloudAccountNestedInput
+  roleDefinitions?: Prisma.CloudRoleDefinitionUncheckedUpdateManyWithoutCloudAccountNestedInput
+  roleAssignments?: Prisma.CloudRoleAssignmentUncheckedUpdateManyWithoutCloudAccountNestedInput
+  iamRiskScans?: Prisma.IamRiskScanUncheckedUpdateManyWithoutCloudAccountNestedInput
+  iamRemediationApprovals?: Prisma.IamRemediationApprovalUncheckedUpdateManyWithoutCloudAccountNestedInput
+  resources?: Prisma.CloudResourceUncheckedUpdateManyWithoutCloudAccountNestedInput
+}
+
+export type CloudAccountUncheckedUpdateManyWithoutOrganizationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  provider?: Prisma.StringFieldUpdateOperationsInput | string
+  accountId?: Prisma.StringFieldUpdateOperationsInput | string
+  environment?: Prisma.StringFieldUpdateOperationsInput | string
+  region?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1122,6 +1355,7 @@ export type CloudAccountCountOutputTypeCountResourcesArgs<ExtArgs extends runtim
 
 export type CloudAccountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  organizationId?: boolean
   name?: boolean
   provider?: boolean
   accountId?: boolean
@@ -1130,6 +1364,7 @@ export type CloudAccountSelect<ExtArgs extends runtime.Types.Extensions.Internal
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   identities?: boolean | Prisma.CloudAccount$identitiesArgs<ExtArgs>
   roleDefinitions?: boolean | Prisma.CloudAccount$roleDefinitionsArgs<ExtArgs>
   roleAssignments?: boolean | Prisma.CloudAccount$roleAssignmentsArgs<ExtArgs>
@@ -1141,6 +1376,7 @@ export type CloudAccountSelect<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type CloudAccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  organizationId?: boolean
   name?: boolean
   provider?: boolean
   accountId?: boolean
@@ -1149,10 +1385,12 @@ export type CloudAccountSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cloudAccount"]>
 
 export type CloudAccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  organizationId?: boolean
   name?: boolean
   provider?: boolean
   accountId?: boolean
@@ -1161,10 +1399,12 @@ export type CloudAccountSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cloudAccount"]>
 
 export type CloudAccountSelectScalar = {
   id?: boolean
+  organizationId?: boolean
   name?: boolean
   provider?: boolean
   accountId?: boolean
@@ -1175,8 +1415,9 @@ export type CloudAccountSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CloudAccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "provider" | "accountId" | "environment" | "region" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["cloudAccount"]>
+export type CloudAccountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "name" | "provider" | "accountId" | "environment" | "region" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["cloudAccount"]>
 export type CloudAccountInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   identities?: boolean | Prisma.CloudAccount$identitiesArgs<ExtArgs>
   roleDefinitions?: boolean | Prisma.CloudAccount$roleDefinitionsArgs<ExtArgs>
   roleAssignments?: boolean | Prisma.CloudAccount$roleAssignmentsArgs<ExtArgs>
@@ -1185,12 +1426,17 @@ export type CloudAccountInclude<ExtArgs extends runtime.Types.Extensions.Interna
   resources?: boolean | Prisma.CloudAccount$resourcesArgs<ExtArgs>
   _count?: boolean | Prisma.CloudAccountCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type CloudAccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type CloudAccountIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type CloudAccountIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+}
+export type CloudAccountIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+}
 
 export type $CloudAccountPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CloudAccount"
   objects: {
+    organization: Prisma.$OrganizationPayload<ExtArgs>
     identities: Prisma.$CloudIdentityPayload<ExtArgs>[]
     roleDefinitions: Prisma.$CloudRoleDefinitionPayload<ExtArgs>[]
     roleAssignments: Prisma.$CloudRoleAssignmentPayload<ExtArgs>[]
@@ -1200,6 +1446,7 @@ export type $CloudAccountPayload<ExtArgs extends runtime.Types.Extensions.Intern
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
+    organizationId: string
     name: string
     provider: string
     accountId: string
@@ -1602,6 +1849,7 @@ readonly fields: CloudAccountFieldRefs;
  */
 export interface Prisma__CloudAccountClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   identities<T extends Prisma.CloudAccount$identitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudAccount$identitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CloudIdentityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roleDefinitions<T extends Prisma.CloudAccount$roleDefinitionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudAccount$roleDefinitionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CloudRoleDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roleAssignments<T extends Prisma.CloudAccount$roleAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CloudAccount$roleAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CloudRoleAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1638,6 +1886,7 @@ export interface Prisma__CloudAccountClient<T, Null = never, ExtArgs extends run
  */
 export interface CloudAccountFieldRefs {
   readonly id: Prisma.FieldRef<"CloudAccount", 'String'>
+  readonly organizationId: Prisma.FieldRef<"CloudAccount", 'String'>
   readonly name: Prisma.FieldRef<"CloudAccount", 'String'>
   readonly provider: Prisma.FieldRef<"CloudAccount", 'String'>
   readonly accountId: Prisma.FieldRef<"CloudAccount", 'String'>
@@ -1900,6 +2149,10 @@ export type CloudAccountCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    */
   data: Prisma.CloudAccountCreateManyInput | Prisma.CloudAccountCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CloudAccountIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1970,6 +2223,10 @@ export type CloudAccountUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many CloudAccounts to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CloudAccountIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

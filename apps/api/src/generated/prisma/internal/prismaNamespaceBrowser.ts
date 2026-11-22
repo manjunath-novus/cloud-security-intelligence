@@ -51,6 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  User: 'User',
+  Organization: 'Organization',
+  OrganizationMembership: 'OrganizationMembership',
+  Session: 'Session',
+  OrganizationInvitation: 'OrganizationInvitation',
   CloudAccount: 'CloudAccount',
   CloudResource: 'CloudResource',
   CloudIdentity: 'CloudIdentity',
@@ -79,8 +84,78 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  passwordHash: 'passwordHash',
+  status: 'status',
+  emailVerifiedAt: 'emailVerifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const OrganizationMembershipScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  organizationId: 'organizationId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrganizationMembershipScalarFieldEnum = (typeof OrganizationMembershipScalarFieldEnum)[keyof typeof OrganizationMembershipScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  lastSeenAt: 'lastSeenAt',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const OrganizationInvitationScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  email: 'email',
+  role: 'role',
+  tokenHash: 'tokenHash',
+  status: 'status',
+  invitedById: 'invitedById',
+  acceptedById: 'acceptedById',
+  expiresAt: 'expiresAt',
+  acceptedAt: 'acceptedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type OrganizationInvitationScalarFieldEnum = (typeof OrganizationInvitationScalarFieldEnum)[keyof typeof OrganizationInvitationScalarFieldEnum]
+
+
 export const CloudAccountScalarFieldEnum = {
   id: 'id',
+  organizationId: 'organizationId',
   name: 'name',
   provider: 'provider',
   accountId: 'accountId',
@@ -194,6 +269,7 @@ export const SecurityFindingEventScalarFieldEnum = {
   note: 'note',
   actorType: 'actorType',
   actorId: 'actorId',
+  actorUserId: 'actorUserId',
   createdAt: 'createdAt'
 } as const
 
@@ -227,6 +303,8 @@ export const IamRemediationApprovalScalarFieldEnum = {
   recommendationTitle: 'recommendationTitle',
   requestedBy: 'requestedBy',
   reviewedBy: 'reviewedBy',
+  requestedByUserId: 'requestedByUserId',
+  reviewedByUserId: 'reviewedByUserId',
   status: 'status',
   requestReason: 'requestReason',
   reviewComment: 'reviewComment',
@@ -244,6 +322,7 @@ export const IamRemediationVerificationScalarFieldEnum = {
   id: 'id',
   approvalId: 'approvalId',
   verifiedBy: 'verifiedBy',
+  verifiedByUserId: 'verifiedByUserId',
   status: 'status',
   evidence: 'evidence',
   notes: 'notes',

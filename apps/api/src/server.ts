@@ -6,6 +6,9 @@ import resourcesRouter from "./routes/resources.js";
 import cloudAccountsRouter from "./routes/cloudAccounts.js";
 import securityRouter from "./routes/security.js";
 import iamRouter from "./routes/iam.js";
+import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth.js";
+import bootstrapRouter from "./routes/bootstrap.js";
 dotenv.config({ path: "../../.env" });
 
 dotenv.config();
@@ -13,8 +16,20 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+const frontendOrigin =
+  process.env.FRONTEND_ORIGIN || "http://localhost:3000";
+
+app.use(
+  cors({
+    origin: frontendOrigin,
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
+
+app.use("/api/auth", authRouter);
+app.use("/api/bootstrap", bootstrapRouter);
 app.use("/api/resources", resourcesRouter);
 app.use("/api/cloud-accounts", cloudAccountsRouter);
 app.use("/api/security", securityRouter);
