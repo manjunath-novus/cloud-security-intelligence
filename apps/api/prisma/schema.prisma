@@ -7,6 +7,10 @@ datasource db {
   provider = "postgresql"
 }
 
+// ==========================================
+// ENUMS
+// ==========================================
+
 enum SecuritySeverity {
   CRITICAL
   HIGH
@@ -51,26 +55,171 @@ enum IamRemediationApprovalAction {
   REJECT
 }
 
+enum UserStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum OrganizationStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  SECURITY_ANALYST
+  VIEWER
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+// ==========================================
+// AUTHENTICATION AND ORGANIZATIONS
+// ==========================================
+
+model User {
+  id              String     @id @default(uuid())
+  email           String     @unique
+  passwordHash    String
+  status          UserStatus @default(ACTIVE)
+  emailVerifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships OrganizationMembership[]
+  sessions    Session[]
+
+  sentInvitations     OrganizationInvitation[] @relation("InvitationInviter")
+  acceptedInvitations OrganizationInvitation[] @relation("InvitationAccepter")
+
+  requestedApprovals IamRemediationApproval[] @relation("ApprovalRequester")
+  reviewedApprovals  IamRemediationApproval[] @relation("ApprovalReviewer")
+
+  verifications IamRemediationVerification[] @relation("VerificationActor")
+  findingEvents SecurityFindingEvent[]       @relation("FindingEventActor")
+
+  @@index([status])
+}
+
+model Organization {
+  id     String             @id @default(uuid())
+  name   String
+  slug   String             @unique
+  status OrganizationStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships   OrganizationMembership[]
+  invitations   OrganizationInvitation[]
+  cloudAccounts CloudAccount[]
+
+  @@index([status])
+}
+
+model OrganizationMembership {
+  id             String           @id @default(uuid())
+  userId         String
+  organizationId String
+  role           OrganizationRole @default(VIEWER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@index([organizationId, role])
+}
+
+model Session {
+  id         String    @id @default(uuid())
+  userId     String
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  lastSeenAt DateTime?
+  userAgent  String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, expiresAt])
+  @@index([expiresAt])
+}
+
+model OrganizationInvitation {
+  id             String           @id @default(uuid())
+  organizationId String
+  email          String
+  role           OrganizationRole @default(VIEWER)
+  tokenHash      String           @unique
+  status         InvitationStatus @default(PENDING)
+
+  invitedById  String
+  acceptedById String?
+
+  expiresAt  DateTime
+  acceptedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  invitedBy User @relation("InvitationInviter", fields: [invitedById], references: [id], onDelete: Restrict)
+
+  acceptedBy User? @relation("InvitationAccepter", fields: [acceptedById], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, email, status])
+  @@index([expiresAt])
+}
+
+// ==========================================
+// CLOUD ACCOUNTS
+// ==========================================
+
 model CloudAccount {
-  id                      String                   @id @default(uuid())
-  name                    String
-  provider                String
-  accountId               String
-  environment             String                   @default("development")
-  region                  String?
-  isActive                Boolean                  @default(true)
-  createdAt               DateTime                 @default(now())
-  updatedAt               DateTime                 @updatedAt
+  id             String @id @default(uuid())
+  organizationId String
+
+  name        String
+  provider    String
+  accountId   String
+  environment String  @default("development")
+  region      String?
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+
   identities              CloudIdentity[]
   roleDefinitions         CloudRoleDefinition[]
   roleAssignments         CloudRoleAssignment[]
   iamRiskScans            IamRiskScan[]
   iamRemediationApprovals IamRemediationApproval[]
+  resources               CloudResource[]
 
-  resources CloudResource[]
-
+  @@unique([organizationId, provider, accountId])
+  @@index([organizationId])
   @@index([provider, accountId])
 }
+
+// ==========================================
+// CLOUD RESOURCE INVENTORY
+// ==========================================
 
 model CloudResource {
   id             String @id @default(uuid())
@@ -88,8 +237,9 @@ model CloudResource {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cloudAccount CloudAccount      @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
-  findings     SecurityFinding[]
+  cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+
+  findings SecurityFinding[]
 
   @@unique([cloudAccountId, providerResourceId])
   @@index([cloudAccountId])
@@ -97,6 +247,10 @@ model CloudResource {
   @@index([region])
   @@index([discoverySource])
 }
+
+// ==========================================
+// CLOUD IDENTITIES
+// ==========================================
 
 model CloudIdentity {
   id                 String            @id @default(uuid())
@@ -108,10 +262,12 @@ model CloudIdentity {
   isEnabled          Boolean           @default(true)
   metadata           Json              @default("{}")
   discoverySource    String            @default("SIMULATED")
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
 
-  cloudAccount            CloudAccount             @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+
   roleAssignments         CloudRoleAssignment[]
   findings                SecurityFinding[]
   iamRemediationApprovals IamRemediationApproval[]
@@ -122,20 +278,26 @@ model CloudIdentity {
   @@index([isEnabled])
 }
 
+// ==========================================
+// CLOUD ROLE DEFINITIONS
+// ==========================================
+
 model CloudRoleDefinition {
-  id                       String   @id @default(uuid())
+  id                       String  @id @default(uuid())
   cloudAccountId           String
   providerRoleDefinitionId String
   name                     String
   description              String?
-  isBuiltIn                Boolean  @default(true)
-  permissions              Json     @default("{}")
-  assignableScopes         Json     @default("[]")
-  discoverySource          String   @default("SIMULATED")
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
+  isBuiltIn                Boolean @default(true)
+  permissions              Json    @default("{}")
+  assignableScopes         Json    @default("[]")
+  discoverySource          String  @default("SIMULATED")
 
-  cloudAccount    CloudAccount          @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+
   roleAssignments CloudRoleAssignment[]
 
   @@unique([cloudAccountId, providerRoleDefinitionId])
@@ -143,8 +305,12 @@ model CloudRoleDefinition {
   @@index([name])
 }
 
+// ==========================================
+// CLOUD ROLE ASSIGNMENTS
+// ==========================================
+
 model CloudRoleAssignment {
-  id                    String   @id @default(uuid())
+  id                    String  @id @default(uuid())
   cloudAccountId        String
   providerAssignmentId  String
   cloudIdentityId       String
@@ -152,12 +318,15 @@ model CloudRoleAssignment {
   scope                 String
   condition             String?
   conditionVersion      String?
-  discoverySource       String   @default("SIMULATED")
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  discoverySource       String  @default("SIMULATED")
 
-  cloudAccount        CloudAccount        @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
-  cloudIdentity       CloudIdentity       @relation(fields: [cloudIdentityId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+
+  cloudIdentity CloudIdentity @relation(fields: [cloudIdentityId], references: [id], onDelete: Cascade)
+
   cloudRoleDefinition CloudRoleDefinition @relation(fields: [cloudRoleDefinitionId], references: [id], onDelete: Cascade)
 
   @@unique([cloudAccountId, providerAssignmentId])
@@ -167,15 +336,20 @@ model CloudRoleAssignment {
   @@index([scope])
 }
 
+// ==========================================
+// SECURITY FINDINGS
+// ==========================================
+
 model SecurityFinding {
-  id              String           @id @default(uuid())
+  id              String  @id @default(uuid())
   cloudResourceId String?
   cloudIdentityId String?
-  ruleId          String
-  title           String
-  description     String
-  severity        SecuritySeverity
-  status          FindingStatus    @default(OPEN)
+
+  ruleId      String
+  title       String
+  description String
+  severity    SecuritySeverity
+  status      FindingStatus    @default(OPEN)
 
   evidence    Json   @default("{}")
   remediation String
@@ -189,9 +363,11 @@ model SecurityFinding {
 
   acknowledgedAt DateTime?
   resolutionNote String?
-  events         SecurityFindingEvent[]
+
+  events SecurityFindingEvent[]
 
   cloudResource CloudResource? @relation(fields: [cloudResourceId], references: [id], onDelete: Cascade)
+
   cloudIdentity CloudIdentity? @relation(fields: [cloudIdentityId], references: [id], onDelete: Cascade)
 
   @@unique([cloudResourceId, ruleId])
@@ -203,6 +379,10 @@ model SecurityFinding {
   @@index([status])
 }
 
+// ==========================================
+// SECURITY FINDING EVENTS
+// ==========================================
+
 model SecurityFindingEvent {
   id         String                   @id @default(uuid())
   findingId  String
@@ -211,15 +391,28 @@ model SecurityFindingEvent {
   toStatus   FindingStatus?
   note       String?
   actorType  SecurityFindingActorType @default(USER)
-  actorId    String?
-  createdAt  DateTime                 @default(now())
+
+  // Legacy actor reference retained for historical records.
+  actorId String?
+
+  // Authenticated application user reference.
+  actorUserId String?
+
+  createdAt DateTime @default(now())
 
   finding SecurityFinding @relation(fields: [findingId], references: [id], onDelete: Cascade)
+
+  actor User? @relation("FindingEventActor", fields: [actorUserId], references: [id], onDelete: SetNull)
 
   @@index([findingId, createdAt])
   @@index([eventType])
   @@index([actorId])
+  @@index([actorUserId])
 }
+
+// ==========================================
+// IAM RISK SCAN HISTORY
+// ==========================================
 
 model IamRiskScan {
   id             String @id @default(uuid())
@@ -247,6 +440,10 @@ model IamRiskScan {
   @@index([cloudAccountId, createdAt])
 }
 
+// ==========================================
+// IAM REMEDIATION APPROVALS
+// ==========================================
+
 model IamRemediationApproval {
   id              String @id @default(uuid())
   cloudAccountId  String
@@ -255,11 +452,15 @@ model IamRemediationApproval {
   ruleId              String
   recommendationTitle String
 
+  // Legacy actor fields retained for existing records.
   requestedBy String
   reviewedBy  String?
 
-  verifications IamRemediationVerification[]
-  status        IamRemediationApprovalStatus @default(PENDING)
+  // Authenticated application user references.
+  requestedByUserId String?
+  reviewedByUserId  String?
+
+  status IamRemediationApprovalStatus @default(PENDING)
 
   requestReason String
   reviewComment String?
@@ -271,21 +472,38 @@ model IamRemediationApproval {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cloudAccount  CloudAccount  @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+  cloudAccount CloudAccount @relation(fields: [cloudAccountId], references: [id], onDelete: Cascade)
+
   cloudIdentity CloudIdentity @relation(fields: [cloudIdentityId], references: [id], onDelete: Cascade)
+
+  requestedByUser User? @relation("ApprovalRequester", fields: [requestedByUserId], references: [id], onDelete: SetNull)
+
+  reviewedByUser User? @relation("ApprovalReviewer", fields: [reviewedByUserId], references: [id], onDelete: SetNull)
+
+  verifications IamRemediationVerification[]
 
   @@index([cloudAccountId, status])
   @@index([cloudIdentityId])
   @@index([requestedBy])
   @@index([reviewedBy])
+  @@index([requestedByUserId])
+  @@index([reviewedByUserId])
   @@index([status, requestedAt])
 }
+
+// ==========================================
+// IAM REMEDIATION VERIFICATION
+// ==========================================
 
 model IamRemediationVerification {
   id         String @id @default(uuid())
   approvalId String
 
+  // Legacy actor field retained for existing records.
   verifiedBy String
+
+  // Authenticated application user reference.
+  verifiedByUserId String?
 
   status IamRemediationVerificationStatus @default(PENDING)
 
@@ -299,7 +517,10 @@ model IamRemediationVerification {
 
   approval IamRemediationApproval @relation(fields: [approvalId], references: [id], onDelete: Cascade)
 
+  verifiedByUser User? @relation("VerificationActor", fields: [verifiedByUserId], references: [id], onDelete: SetNull)
+
   @@index([approvalId, status])
   @@index([verifiedBy])
+  @@index([verifiedByUserId])
   @@index([status, createdAt])
 }
