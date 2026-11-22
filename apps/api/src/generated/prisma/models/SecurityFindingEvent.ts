@@ -33,6 +33,7 @@ export type SecurityFindingEventMinAggregateOutputType = {
   note: string | null
   actorType: $Enums.SecurityFindingActorType | null
   actorId: string | null
+  actorUserId: string | null
   createdAt: Date | null
 }
 
@@ -45,6 +46,7 @@ export type SecurityFindingEventMaxAggregateOutputType = {
   note: string | null
   actorType: $Enums.SecurityFindingActorType | null
   actorId: string | null
+  actorUserId: string | null
   createdAt: Date | null
 }
 
@@ -57,6 +59,7 @@ export type SecurityFindingEventCountAggregateOutputType = {
   note: number
   actorType: number
   actorId: number
+  actorUserId: number
   createdAt: number
   _all: number
 }
@@ -71,6 +74,7 @@ export type SecurityFindingEventMinAggregateInputType = {
   note?: true
   actorType?: true
   actorId?: true
+  actorUserId?: true
   createdAt?: true
 }
 
@@ -83,6 +87,7 @@ export type SecurityFindingEventMaxAggregateInputType = {
   note?: true
   actorType?: true
   actorId?: true
+  actorUserId?: true
   createdAt?: true
 }
 
@@ -95,6 +100,7 @@ export type SecurityFindingEventCountAggregateInputType = {
   note?: true
   actorType?: true
   actorId?: true
+  actorUserId?: true
   createdAt?: true
   _all?: true
 }
@@ -180,6 +186,7 @@ export type SecurityFindingEventGroupByOutputType = {
   note: string | null
   actorType: $Enums.SecurityFindingActorType
   actorId: string | null
+  actorUserId: string | null
   createdAt: Date
   _count: SecurityFindingEventCountAggregateOutputType | null
   _min: SecurityFindingEventMinAggregateOutputType | null
@@ -213,8 +220,10 @@ export type SecurityFindingEventWhereInput = {
   note?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeFilter<"SecurityFindingEvent"> | $Enums.SecurityFindingActorType
   actorId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
+  actorUserId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SecurityFindingEvent"> | Date | string
   finding?: Prisma.XOR<Prisma.SecurityFindingScalarRelationFilter, Prisma.SecurityFindingWhereInput>
+  actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type SecurityFindingEventOrderByWithRelationInput = {
@@ -226,8 +235,10 @@ export type SecurityFindingEventOrderByWithRelationInput = {
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   actorType?: Prisma.SortOrder
   actorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   finding?: Prisma.SecurityFindingOrderByWithRelationInput
+  actor?: Prisma.UserOrderByWithRelationInput
 }
 
 export type SecurityFindingEventWhereUniqueInput = Prisma.AtLeast<{
@@ -242,8 +253,10 @@ export type SecurityFindingEventWhereUniqueInput = Prisma.AtLeast<{
   note?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeFilter<"SecurityFindingEvent"> | $Enums.SecurityFindingActorType
   actorId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
+  actorUserId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SecurityFindingEvent"> | Date | string
   finding?: Prisma.XOR<Prisma.SecurityFindingScalarRelationFilter, Prisma.SecurityFindingWhereInput>
+  actor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type SecurityFindingEventOrderByWithAggregationInput = {
@@ -255,6 +268,7 @@ export type SecurityFindingEventOrderByWithAggregationInput = {
   note?: Prisma.SortOrderInput | Prisma.SortOrder
   actorType?: Prisma.SortOrder
   actorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  actorUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SecurityFindingEventCountOrderByAggregateInput
   _max?: Prisma.SecurityFindingEventMaxOrderByAggregateInput
@@ -273,6 +287,7 @@ export type SecurityFindingEventScalarWhereWithAggregatesInput = {
   note?: Prisma.StringNullableWithAggregatesFilter<"SecurityFindingEvent"> | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeWithAggregatesFilter<"SecurityFindingEvent"> | $Enums.SecurityFindingActorType
   actorId?: Prisma.StringNullableWithAggregatesFilter<"SecurityFindingEvent"> | string | null
+  actorUserId?: Prisma.StringNullableWithAggregatesFilter<"SecurityFindingEvent"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SecurityFindingEvent"> | Date | string
 }
 
@@ -286,6 +301,7 @@ export type SecurityFindingEventCreateInput = {
   actorId?: string | null
   createdAt?: Date | string
   finding: Prisma.SecurityFindingCreateNestedOneWithoutEventsInput
+  actor?: Prisma.UserCreateNestedOneWithoutFindingEventsInput
 }
 
 export type SecurityFindingEventUncheckedCreateInput = {
@@ -297,6 +313,7 @@ export type SecurityFindingEventUncheckedCreateInput = {
   note?: string | null
   actorType?: $Enums.SecurityFindingActorType
   actorId?: string | null
+  actorUserId?: string | null
   createdAt?: Date | string
 }
 
@@ -310,6 +327,7 @@ export type SecurityFindingEventUpdateInput = {
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   finding?: Prisma.SecurityFindingUpdateOneRequiredWithoutEventsNestedInput
+  actor?: Prisma.UserUpdateOneWithoutFindingEventsNestedInput
 }
 
 export type SecurityFindingEventUncheckedUpdateInput = {
@@ -321,6 +339,7 @@ export type SecurityFindingEventUncheckedUpdateInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -333,6 +352,7 @@ export type SecurityFindingEventCreateManyInput = {
   note?: string | null
   actorType?: $Enums.SecurityFindingActorType
   actorId?: string | null
+  actorUserId?: string | null
   createdAt?: Date | string
 }
 
@@ -356,6 +376,7 @@ export type SecurityFindingEventUncheckedUpdateManyInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -378,6 +399,7 @@ export type SecurityFindingEventCountOrderByAggregateInput = {
   note?: Prisma.SortOrder
   actorType?: Prisma.SortOrder
   actorId?: Prisma.SortOrder
+  actorUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -390,6 +412,7 @@ export type SecurityFindingEventMaxOrderByAggregateInput = {
   note?: Prisma.SortOrder
   actorType?: Prisma.SortOrder
   actorId?: Prisma.SortOrder
+  actorUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -402,7 +425,50 @@ export type SecurityFindingEventMinOrderByAggregateInput = {
   note?: Prisma.SortOrder
   actorType?: Prisma.SortOrder
   actorId?: Prisma.SortOrder
+  actorUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type SecurityFindingEventCreateNestedManyWithoutActorInput = {
+  create?: Prisma.XOR<Prisma.SecurityFindingEventCreateWithoutActorInput, Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput> | Prisma.SecurityFindingEventCreateWithoutActorInput[] | Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput | Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput[]
+  createMany?: Prisma.SecurityFindingEventCreateManyActorInputEnvelope
+  connect?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+}
+
+export type SecurityFindingEventUncheckedCreateNestedManyWithoutActorInput = {
+  create?: Prisma.XOR<Prisma.SecurityFindingEventCreateWithoutActorInput, Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput> | Prisma.SecurityFindingEventCreateWithoutActorInput[] | Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput | Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput[]
+  createMany?: Prisma.SecurityFindingEventCreateManyActorInputEnvelope
+  connect?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+}
+
+export type SecurityFindingEventUpdateManyWithoutActorNestedInput = {
+  create?: Prisma.XOR<Prisma.SecurityFindingEventCreateWithoutActorInput, Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput> | Prisma.SecurityFindingEventCreateWithoutActorInput[] | Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput | Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput[]
+  upsert?: Prisma.SecurityFindingEventUpsertWithWhereUniqueWithoutActorInput | Prisma.SecurityFindingEventUpsertWithWhereUniqueWithoutActorInput[]
+  createMany?: Prisma.SecurityFindingEventCreateManyActorInputEnvelope
+  set?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  disconnect?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  delete?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  connect?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  update?: Prisma.SecurityFindingEventUpdateWithWhereUniqueWithoutActorInput | Prisma.SecurityFindingEventUpdateWithWhereUniqueWithoutActorInput[]
+  updateMany?: Prisma.SecurityFindingEventUpdateManyWithWhereWithoutActorInput | Prisma.SecurityFindingEventUpdateManyWithWhereWithoutActorInput[]
+  deleteMany?: Prisma.SecurityFindingEventScalarWhereInput | Prisma.SecurityFindingEventScalarWhereInput[]
+}
+
+export type SecurityFindingEventUncheckedUpdateManyWithoutActorNestedInput = {
+  create?: Prisma.XOR<Prisma.SecurityFindingEventCreateWithoutActorInput, Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput> | Prisma.SecurityFindingEventCreateWithoutActorInput[] | Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput[]
+  connectOrCreate?: Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput | Prisma.SecurityFindingEventCreateOrConnectWithoutActorInput[]
+  upsert?: Prisma.SecurityFindingEventUpsertWithWhereUniqueWithoutActorInput | Prisma.SecurityFindingEventUpsertWithWhereUniqueWithoutActorInput[]
+  createMany?: Prisma.SecurityFindingEventCreateManyActorInputEnvelope
+  set?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  disconnect?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  delete?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  connect?: Prisma.SecurityFindingEventWhereUniqueInput | Prisma.SecurityFindingEventWhereUniqueInput[]
+  update?: Prisma.SecurityFindingEventUpdateWithWhereUniqueWithoutActorInput | Prisma.SecurityFindingEventUpdateWithWhereUniqueWithoutActorInput[]
+  updateMany?: Prisma.SecurityFindingEventUpdateManyWithWhereWithoutActorInput | Prisma.SecurityFindingEventUpdateManyWithWhereWithoutActorInput[]
+  deleteMany?: Prisma.SecurityFindingEventScalarWhereInput | Prisma.SecurityFindingEventScalarWhereInput[]
 }
 
 export type SecurityFindingEventCreateNestedManyWithoutFindingInput = {
@@ -455,6 +521,72 @@ export type EnumSecurityFindingActorTypeFieldUpdateOperationsInput = {
   set?: $Enums.SecurityFindingActorType
 }
 
+export type SecurityFindingEventCreateWithoutActorInput = {
+  id?: string
+  eventType: string
+  fromStatus?: $Enums.FindingStatus | null
+  toStatus?: $Enums.FindingStatus | null
+  note?: string | null
+  actorType?: $Enums.SecurityFindingActorType
+  actorId?: string | null
+  createdAt?: Date | string
+  finding: Prisma.SecurityFindingCreateNestedOneWithoutEventsInput
+}
+
+export type SecurityFindingEventUncheckedCreateWithoutActorInput = {
+  id?: string
+  findingId: string
+  eventType: string
+  fromStatus?: $Enums.FindingStatus | null
+  toStatus?: $Enums.FindingStatus | null
+  note?: string | null
+  actorType?: $Enums.SecurityFindingActorType
+  actorId?: string | null
+  createdAt?: Date | string
+}
+
+export type SecurityFindingEventCreateOrConnectWithoutActorInput = {
+  where: Prisma.SecurityFindingEventWhereUniqueInput
+  create: Prisma.XOR<Prisma.SecurityFindingEventCreateWithoutActorInput, Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput>
+}
+
+export type SecurityFindingEventCreateManyActorInputEnvelope = {
+  data: Prisma.SecurityFindingEventCreateManyActorInput | Prisma.SecurityFindingEventCreateManyActorInput[]
+  skipDuplicates?: boolean
+}
+
+export type SecurityFindingEventUpsertWithWhereUniqueWithoutActorInput = {
+  where: Prisma.SecurityFindingEventWhereUniqueInput
+  update: Prisma.XOR<Prisma.SecurityFindingEventUpdateWithoutActorInput, Prisma.SecurityFindingEventUncheckedUpdateWithoutActorInput>
+  create: Prisma.XOR<Prisma.SecurityFindingEventCreateWithoutActorInput, Prisma.SecurityFindingEventUncheckedCreateWithoutActorInput>
+}
+
+export type SecurityFindingEventUpdateWithWhereUniqueWithoutActorInput = {
+  where: Prisma.SecurityFindingEventWhereUniqueInput
+  data: Prisma.XOR<Prisma.SecurityFindingEventUpdateWithoutActorInput, Prisma.SecurityFindingEventUncheckedUpdateWithoutActorInput>
+}
+
+export type SecurityFindingEventUpdateManyWithWhereWithoutActorInput = {
+  where: Prisma.SecurityFindingEventScalarWhereInput
+  data: Prisma.XOR<Prisma.SecurityFindingEventUpdateManyMutationInput, Prisma.SecurityFindingEventUncheckedUpdateManyWithoutActorInput>
+}
+
+export type SecurityFindingEventScalarWhereInput = {
+  AND?: Prisma.SecurityFindingEventScalarWhereInput | Prisma.SecurityFindingEventScalarWhereInput[]
+  OR?: Prisma.SecurityFindingEventScalarWhereInput[]
+  NOT?: Prisma.SecurityFindingEventScalarWhereInput | Prisma.SecurityFindingEventScalarWhereInput[]
+  id?: Prisma.StringFilter<"SecurityFindingEvent"> | string
+  findingId?: Prisma.StringFilter<"SecurityFindingEvent"> | string
+  eventType?: Prisma.StringFilter<"SecurityFindingEvent"> | string
+  fromStatus?: Prisma.EnumFindingStatusNullableFilter<"SecurityFindingEvent"> | $Enums.FindingStatus | null
+  toStatus?: Prisma.EnumFindingStatusNullableFilter<"SecurityFindingEvent"> | $Enums.FindingStatus | null
+  note?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
+  actorType?: Prisma.EnumSecurityFindingActorTypeFilter<"SecurityFindingEvent"> | $Enums.SecurityFindingActorType
+  actorId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
+  actorUserId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"SecurityFindingEvent"> | Date | string
+}
+
 export type SecurityFindingEventCreateWithoutFindingInput = {
   id?: string
   eventType: string
@@ -464,6 +596,7 @@ export type SecurityFindingEventCreateWithoutFindingInput = {
   actorType?: $Enums.SecurityFindingActorType
   actorId?: string | null
   createdAt?: Date | string
+  actor?: Prisma.UserCreateNestedOneWithoutFindingEventsInput
 }
 
 export type SecurityFindingEventUncheckedCreateWithoutFindingInput = {
@@ -474,6 +607,7 @@ export type SecurityFindingEventUncheckedCreateWithoutFindingInput = {
   note?: string | null
   actorType?: $Enums.SecurityFindingActorType
   actorId?: string | null
+  actorUserId?: string | null
   createdAt?: Date | string
 }
 
@@ -503,19 +637,52 @@ export type SecurityFindingEventUpdateManyWithWhereWithoutFindingInput = {
   data: Prisma.XOR<Prisma.SecurityFindingEventUpdateManyMutationInput, Prisma.SecurityFindingEventUncheckedUpdateManyWithoutFindingInput>
 }
 
-export type SecurityFindingEventScalarWhereInput = {
-  AND?: Prisma.SecurityFindingEventScalarWhereInput | Prisma.SecurityFindingEventScalarWhereInput[]
-  OR?: Prisma.SecurityFindingEventScalarWhereInput[]
-  NOT?: Prisma.SecurityFindingEventScalarWhereInput | Prisma.SecurityFindingEventScalarWhereInput[]
-  id?: Prisma.StringFilter<"SecurityFindingEvent"> | string
-  findingId?: Prisma.StringFilter<"SecurityFindingEvent"> | string
-  eventType?: Prisma.StringFilter<"SecurityFindingEvent"> | string
-  fromStatus?: Prisma.EnumFindingStatusNullableFilter<"SecurityFindingEvent"> | $Enums.FindingStatus | null
-  toStatus?: Prisma.EnumFindingStatusNullableFilter<"SecurityFindingEvent"> | $Enums.FindingStatus | null
-  note?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
-  actorType?: Prisma.EnumSecurityFindingActorTypeFilter<"SecurityFindingEvent"> | $Enums.SecurityFindingActorType
-  actorId?: Prisma.StringNullableFilter<"SecurityFindingEvent"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"SecurityFindingEvent"> | Date | string
+export type SecurityFindingEventCreateManyActorInput = {
+  id?: string
+  findingId: string
+  eventType: string
+  fromStatus?: $Enums.FindingStatus | null
+  toStatus?: $Enums.FindingStatus | null
+  note?: string | null
+  actorType?: $Enums.SecurityFindingActorType
+  actorId?: string | null
+  createdAt?: Date | string
+}
+
+export type SecurityFindingEventUpdateWithoutActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStatus?: Prisma.NullableEnumFindingStatusFieldUpdateOperationsInput | $Enums.FindingStatus | null
+  toStatus?: Prisma.NullableEnumFindingStatusFieldUpdateOperationsInput | $Enums.FindingStatus | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  finding?: Prisma.SecurityFindingUpdateOneRequiredWithoutEventsNestedInput
+}
+
+export type SecurityFindingEventUncheckedUpdateWithoutActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  findingId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStatus?: Prisma.NullableEnumFindingStatusFieldUpdateOperationsInput | $Enums.FindingStatus | null
+  toStatus?: Prisma.NullableEnumFindingStatusFieldUpdateOperationsInput | $Enums.FindingStatus | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SecurityFindingEventUncheckedUpdateManyWithoutActorInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  findingId?: Prisma.StringFieldUpdateOperationsInput | string
+  eventType?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStatus?: Prisma.NullableEnumFindingStatusFieldUpdateOperationsInput | $Enums.FindingStatus | null
+  toStatus?: Prisma.NullableEnumFindingStatusFieldUpdateOperationsInput | $Enums.FindingStatus | null
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
+  actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SecurityFindingEventCreateManyFindingInput = {
@@ -526,6 +693,7 @@ export type SecurityFindingEventCreateManyFindingInput = {
   note?: string | null
   actorType?: $Enums.SecurityFindingActorType
   actorId?: string | null
+  actorUserId?: string | null
   createdAt?: Date | string
 }
 
@@ -538,6 +706,7 @@ export type SecurityFindingEventUpdateWithoutFindingInput = {
   actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  actor?: Prisma.UserUpdateOneWithoutFindingEventsNestedInput
 }
 
 export type SecurityFindingEventUncheckedUpdateWithoutFindingInput = {
@@ -548,6 +717,7 @@ export type SecurityFindingEventUncheckedUpdateWithoutFindingInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -559,6 +729,7 @@ export type SecurityFindingEventUncheckedUpdateManyWithoutFindingInput = {
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   actorType?: Prisma.EnumSecurityFindingActorTypeFieldUpdateOperationsInput | $Enums.SecurityFindingActorType
   actorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actorUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -573,8 +744,10 @@ export type SecurityFindingEventSelect<ExtArgs extends runtime.Types.Extensions.
   note?: boolean
   actorType?: boolean
   actorId?: boolean
+  actorUserId?: boolean
   createdAt?: boolean
   finding?: boolean | Prisma.SecurityFindingDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.SecurityFindingEvent$actorArgs<ExtArgs>
 }, ExtArgs["result"]["securityFindingEvent"]>
 
 export type SecurityFindingEventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -586,8 +759,10 @@ export type SecurityFindingEventSelectCreateManyAndReturn<ExtArgs extends runtim
   note?: boolean
   actorType?: boolean
   actorId?: boolean
+  actorUserId?: boolean
   createdAt?: boolean
   finding?: boolean | Prisma.SecurityFindingDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.SecurityFindingEvent$actorArgs<ExtArgs>
 }, ExtArgs["result"]["securityFindingEvent"]>
 
 export type SecurityFindingEventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -599,8 +774,10 @@ export type SecurityFindingEventSelectUpdateManyAndReturn<ExtArgs extends runtim
   note?: boolean
   actorType?: boolean
   actorId?: boolean
+  actorUserId?: boolean
   createdAt?: boolean
   finding?: boolean | Prisma.SecurityFindingDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.SecurityFindingEvent$actorArgs<ExtArgs>
 }, ExtArgs["result"]["securityFindingEvent"]>
 
 export type SecurityFindingEventSelectScalar = {
@@ -612,24 +789,29 @@ export type SecurityFindingEventSelectScalar = {
   note?: boolean
   actorType?: boolean
   actorId?: boolean
+  actorUserId?: boolean
   createdAt?: boolean
 }
 
-export type SecurityFindingEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "findingId" | "eventType" | "fromStatus" | "toStatus" | "note" | "actorType" | "actorId" | "createdAt", ExtArgs["result"]["securityFindingEvent"]>
+export type SecurityFindingEventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "findingId" | "eventType" | "fromStatus" | "toStatus" | "note" | "actorType" | "actorId" | "actorUserId" | "createdAt", ExtArgs["result"]["securityFindingEvent"]>
 export type SecurityFindingEventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   finding?: boolean | Prisma.SecurityFindingDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.SecurityFindingEvent$actorArgs<ExtArgs>
 }
 export type SecurityFindingEventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   finding?: boolean | Prisma.SecurityFindingDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.SecurityFindingEvent$actorArgs<ExtArgs>
 }
 export type SecurityFindingEventIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   finding?: boolean | Prisma.SecurityFindingDefaultArgs<ExtArgs>
+  actor?: boolean | Prisma.SecurityFindingEvent$actorArgs<ExtArgs>
 }
 
 export type $SecurityFindingEventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SecurityFindingEvent"
   objects: {
     finding: Prisma.$SecurityFindingPayload<ExtArgs>
+    actor: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -640,6 +822,7 @@ export type $SecurityFindingEventPayload<ExtArgs extends runtime.Types.Extension
     note: string | null
     actorType: $Enums.SecurityFindingActorType
     actorId: string | null
+    actorUserId: string | null
     createdAt: Date
   }, ExtArgs["result"]["securityFindingEvent"]>
   composites: {}
@@ -1036,6 +1219,7 @@ readonly fields: SecurityFindingEventFieldRefs;
 export interface Prisma__SecurityFindingEventClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   finding<T extends Prisma.SecurityFindingDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SecurityFindingDefaultArgs<ExtArgs>>): Prisma.Prisma__SecurityFindingClient<runtime.Types.Result.GetResult<Prisma.$SecurityFindingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  actor<T extends Prisma.SecurityFindingEvent$actorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SecurityFindingEvent$actorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1073,6 +1257,7 @@ export interface SecurityFindingEventFieldRefs {
   readonly note: Prisma.FieldRef<"SecurityFindingEvent", 'String'>
   readonly actorType: Prisma.FieldRef<"SecurityFindingEvent", 'SecurityFindingActorType'>
   readonly actorId: Prisma.FieldRef<"SecurityFindingEvent", 'String'>
+  readonly actorUserId: Prisma.FieldRef<"SecurityFindingEvent", 'String'>
   readonly createdAt: Prisma.FieldRef<"SecurityFindingEvent", 'DateTime'>
 }
     
@@ -1472,6 +1657,25 @@ export type SecurityFindingEventDeleteManyArgs<ExtArgs extends runtime.Types.Ext
    * Limit how many SecurityFindingEvents to delete.
    */
   limit?: number
+}
+
+/**
+ * SecurityFindingEvent.actor
+ */
+export type SecurityFindingEvent$actorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
