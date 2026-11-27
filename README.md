@@ -695,7 +695,7 @@ For significant changes, open an issue first to discuss the proposed implementat
 
 ## Author
 
-**Manjunath Halli**
+**Manjunath**
 
 Computer Science Engineering Student | Cloud Computing | Software Engineering | Security
 
