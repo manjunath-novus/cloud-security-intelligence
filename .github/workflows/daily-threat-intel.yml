@@ -1,0 +1,32 @@
+name: Daily Threat Intelligence Sync
+
+on:
+  schedule:
+    - cron: '30 4 * * *' # Runs daily at 10:00 AM IST (04:30 UTC)
+  workflow_dispatch:      # Lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-threat-intel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout cloud-security-intelligence
+        uses: actions/checkout@v4
+
+      - name: Fetch latest CISA KEV advisory
+        run: |
+          mkdir -p docs/threat-intel
+          DATE=$(date -u +"%Y-%m-%d")
+          curl -s https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json \
+            | jq -r '.vulnerabilities[-3:] | reverse | .[] | "### \(.cveID) — \(.vulnerabilityName)\n- **Vendor:** \(.vendorProject) (\(.product))\n- **Added:** \(.dateAdded)\n- **Summary:** \(.shortDescription)\n- **Action:** \(.requiredAction)\n"' \
+            > "docs/threat-intel/${DATE}.md"
+
+      - name: Commit and push to main
+        run: |
+          git config user.name "manjunath-nova"
+          git config user.email "manjunath.noval@gmail.com"
+          git add docs/threat-intel/
+          git diff --staged --quiet || git commit -m "docs(threat-intel): sync daily CVE advisory feed"
+          git push
